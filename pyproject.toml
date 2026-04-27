@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "annotation-quality-filter"
+version = "0.1.0"
+description = "Heuristic quality filter for Stanza/UD-like linguistic annotations."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Deszo English App" }
+]
+keywords = ["nlp", "stanza", "universal-dependencies", "annotation-quality"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Text Processing :: Linguistic"
+]
+
+[project.scripts]
+annotation-quality-filter = "annotation_quality_filter.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["annotation_quality_filter*"]
+
