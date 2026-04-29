@@ -1,66 +1,145 @@
 # Annotation Quality Filter
 
-## English
+`annotation_quality_filter` evaluates and filters Stanza-compatible linguistic
+annotation documents.
 
-`annotation_quality_filter` is a module for evaluating the quality of linguistic sentence annotations produced by Stanza or another Universal Dependencies-like parser. It checks whether an annotated sentence is structurally valid, linguistically plausible, and suitable for downstream analysis.
+The module accepts an `AnnotatedDocument`, scores every sentence annotation, and
+returns:
 
-The first target parser version is Stanza v1.
+- a primary filtered `AnnotatedDocument` with the same schema as the input;
+- a secondary `AnnotationQualityDocumentStatus` explaining all decisions.
 
-### Purpose
+The primary output never contains quality, debug, or log fields.
 
-The module is designed to filter out low-quality parser output before it is used by grammar extraction, corpus statistics, or other language-learning features.
-
-It does not modify annotations. Instead, it returns a transparent quality decision with a numeric score, a label, and diagnostic reasons.
-
-### Main Capabilities
-
-- Validate dependency tree structure.
-- Detect parser errors and annotation anomalies.
-- Calculate a quality score from `0.0` to `1.0`.
-- Classify sentences as `ACCEPT`, `WEAK_ACCEPT`, or `REJECT`.
-- Explain every decision through issue codes and diagnostics.
-- Support parser-agnostic UD-like input, not only Stanza.
-
-### Input
+## Input Contract
 
 ```ts
-interface AnnotatedSentence {
+interface AnnotatedDocument {
+  sentences: Sentence[];
+  entities: Entity[];
+}
+
+interface Sentence {
+  text: string;
+  tokens: Token[];
+  words: Word[];
+}
+
+interface Token {
   text: string;
   words: Word[];
 }
 
 interface Word {
   text: string;
-  lemma: string;
+  lemma?: string;
   upos: string;
+  xpos?: string;
   feats?: string;
   head: number;
   deprel: string;
   start_char: number;
   end_char: number;
 }
-```
 
-### Output
-
-```ts
-interface AnnotationQualityResult {
-  score: number;
-  label: "ACCEPT" | "WEAK_ACCEPT" | "REJECT";
-  reasons: QualityIssue[];
-  diagnostics: {
-    structural: StructuralMetrics;
-    dependency: DependencyMetrics;
-    morphology: MorphologyMetrics;
-    sentence: SentenceMetrics;
-    distribution: DistributionMetrics;
-  };
+interface Entity {
+  text: string;
+  type: string;
+  start_char: number;
+  end_char: number;
 }
 ```
 
-### Quality Model
+## Python Usage
 
-The production scoring model uses hard failures and weighted soft penalties:
+```py
+from annotation_quality_filter import AnnotationQualityFilter
+
+filter_ = AnnotationQualityFilter()
+
+primary_document = filter_.filter_document(document)
+output = filter_.filter_with_status(document)
+
+assert output.document == primary_document
+status = output.status
+```
+
+Public API is exported only through `annotation_quality_filter.__init__`.
+
+## Retention Policy
+
+Default policy:
+
+```text
+ACCEPT      -> retained in primary document
+WEAK_ACCEPT -> retained in primary document
+REJECT      -> removed from primary document
+```
+
+Strict policy:
+
+```py
+from annotation_quality_filter import AnnotationQualityConfig, AnnotationQualityFilter
+
+config = AnnotationQualityConfig(retention_policy="ACCEPT_ONLY")
+filter_ = AnnotationQualityFilter(config)
+```
+
+With `ACCEPT_ONLY`, `WEAK_ACCEPT` sentences remain in status output but are not
+included in the primary document.
+
+## CLI Usage
+
+Read from a file and write the primary filtered document to a file:
+
+```bash
+python -m annotation_quality_filter --input hollow.annotations.json --output filtered.annotations.json
+```
+
+Also write status to a separate file:
+
+```bash
+python -m annotation_quality_filter \
+  --input hollow.annotations.json \
+  --output filtered.annotations.json \
+  --status-output quality-status.json
+```
+
+Use stdin/stdout:
+
+```bash
+python -m annotation_quality_filter < hollow.annotations.json > filtered.annotations.json
+```
+
+Strict retention:
+
+```bash
+python -m annotation_quality_filter \
+  --input hollow.annotations.json \
+  --output filtered.annotations.json \
+  --retention-policy ACCEPT_ONLY
+```
+
+CLI streams are separated:
+
+- `stdout`: only the primary filtered `AnnotatedDocument`;
+- `--output`: only the primary filtered `AnnotatedDocument`;
+- `--status-output`: only `AnnotationQualityDocumentStatus`;
+- `stderr`: logs and errors only.
+
+Exit codes:
+
+- `0`: success;
+- `1`: expected data/configuration error;
+- `2+`: system/runtime error.
+
+Errors never create partial output.
+
+## Quality Model
+
+Hard failures immediately produce `score = 0.0` and `REJECT`.
+
+Soft scoring:
 
 ```text
 score = 1.0
@@ -71,207 +150,43 @@ score = 1.0
   - 0.10 * distribution_penalty
 ```
 
-Hard failures immediately reject the sentence with `score = 0.0`. Examples include missing root, multiple roots, invalid head indexes, empty sentences, and sentences with fewer than two tokens.
+Default thresholds:
 
-Default production thresholds:
+- `score >= 0.80`: `ACCEPT`;
+- `0.60 <= score < 0.80`: `WEAK_ACCEPT`;
+- `score < 0.60`: `REJECT`.
 
-- `score >= 0.80` -> `ACCEPT`
-- `0.60 <= score < 0.80` -> `WEAK_ACCEPT`
-- `score < 0.60` -> `REJECT`
+## Entity Filtering
 
-### Checks
+By default, entities are retained only when their span belongs to a retained
+sentence span.
 
-The module is expected to perform these groups of checks:
-
-- Structural validation: root count, valid head indexes, connectedness, orphan nodes.
-- Dependency consistency: finite verb subjects, auxiliary chains, conjunction ratio, suspicious dependency relations, relative clause attachment.
-- Morphological consistency: missing tense, invalid or empty morphology, basic subject-verb agreement.
-- Sentence-level heuristics: length, newlines, absence of verbs, punctuation sanity.
-- Distribution checks: POS imbalance, dependency relation imbalance, unusual relation concentration.
-
-### Design Principles
-
-- Fail fast on broken dependency trees.
-- Prefer heuristics over strict linguistic truth claims.
-- Keep parser integration generic and UD-like.
-- Make every decision explainable.
-- Never mutate source annotations.
-- Allow new checks, custom penalty weights, corpus-level logging, and future trained scoring.
-
-### Usage Example
-
-```ts
-const result = annotationQualityFilter.evaluate(sentence);
-
-if (result.label === "REJECT") {
-  skip(sentence);
-}
-```
-
-### Python Usage
+If a retained sentence span cannot be resolved, the default policy is an expected
+input error. Dropping all entities for unresolved spans is available only through
+an explicit opt-in configuration:
 
 ```py
-from annotation_quality_filter import evaluate
+from annotation_quality_filter import AnnotationQualityConfig, EntityFilteringConfig
 
-result = evaluate(sentence)
-
-if result.label == "REJECT":
-    skip(sentence)
+config = AnnotationQualityConfig(
+    entity_filtering=EntityFilteringConfig(
+        on_unresolvable_sentence_span="drop_entities",
+    ),
+)
 ```
 
-### CLI Usage
+## Verification
+
+Run tests:
 
 ```bash
-python -m annotation_quality_filter hollow.annotations.json --pretty
-python -m annotation_quality_filter hollow.annotations.json --limit 20 --jsonl
-python -m annotation_quality_filter hollow.annotations.json -o quality-results.json --pretty
+python -m pytest -q
 ```
 
-The CLI accepts a single sentence object, a list of sentence objects, or a Stanza-style JSON object with a top-level `sentences` array.
+The architecture specification is in
+[`docs/architecture.md`](docs/architecture.md). A checked Coq specification is
+kept in [`docs/AnnotationQualityFilterSpec.v`](docs/AnnotationQualityFilterSpec.v).
 
-### License And Use
+## License
 
-This project is intended to be published with source code available for non-commercial use. Commercial use is not permitted unless the project owner grants a separate license.
-
-The repository includes a non-commercial source-available `LICENSE`. This is intentionally not a permissive OSI-style open-source license because commercial use is restricted.
-
-See [docs/architecture.en.md](docs/architecture.en.md) for the English architecture specification.
-
----
-
-## Русский
-
-`annotation_quality_filter` — модуль для оценки качества лингвистических аннотаций предложений, полученных из Stanza или другого UD-подобного парсера. Он проверяет, насколько аннотированное предложение структурно корректно, лингвистически правдоподобно и пригодно для дальнейшего анализа.
-
-Целевая версия парсера для первой версии модуля: Stanza v1.
-
-### Назначение
-
-Модуль нужен, чтобы отсеивать низкокачественный результат парсинга до того, как он попадет в извлечение грамматики, корпусную статистику или другие функции приложения для изучения английского языка.
-
-Модуль не изменяет аннотации. Он возвращает прозрачное решение о качестве: числовой score, итоговую метку и диагностические причины.
-
-### Основные возможности
-
-- Проверка структуры dependency tree.
-- Выявление ошибок парсера и аномалий аннотации.
-- Расчет quality score от `0.0` до `1.0`.
-- Классификация предложений как `ACCEPT`, `WEAK_ACCEPT` или `REJECT`.
-- Объяснение каждого решения через issue-коды и диагностику.
-- Поддержка UD-подобного входа, не привязанного строго к Stanza.
-
-### Вход
-
-```ts
-interface AnnotatedSentence {
-  text: string;
-  words: Word[];
-}
-
-interface Word {
-  text: string;
-  lemma: string;
-  upos: string;
-  feats?: string;
-  head: number;
-  deprel: string;
-  start_char: number;
-  end_char: number;
-}
-```
-
-### Выход
-
-```ts
-interface AnnotationQualityResult {
-  score: number;
-  label: "ACCEPT" | "WEAK_ACCEPT" | "REJECT";
-  reasons: QualityIssue[];
-  diagnostics: {
-    structural: StructuralMetrics;
-    dependency: DependencyMetrics;
-    morphology: MorphologyMetrics;
-    sentence: SentenceMetrics;
-    distribution: DistributionMetrics;
-  };
-}
-```
-
-### Модель оценки качества
-
-Production-модель использует hard failures и взвешенные soft penalties:
-
-```text
-score = 1.0
-  - 0.30 * structural_penalty
-  - 0.35 * dependency_penalty
-  - 0.15 * morphology_penalty
-  - 0.10 * sentence_penalty
-  - 0.10 * distribution_penalty
-```
-
-Hard failures сразу отклоняют предложение с `score = 0.0`. Примеры: нет root, несколько root, невалидные head-индексы, пустое предложение, меньше двух токенов.
-
-Production-пороги по умолчанию:
-
-- `score >= 0.80` -> `ACCEPT`
-- `0.60 <= score < 0.80` -> `WEAK_ACCEPT`
-- `score < 0.60` -> `REJECT`
-
-### Проверки
-
-Ожидаемые группы проверок:
-
-- Structural validation: количество root, валидность head-индексов, связность дерева, orphan nodes.
-- Dependency consistency: subject у finite verb, цепочки aux, доля conj, подозрительные dependency-связи, attachment для relcl.
-- Morphological consistency: отсутствие Tense, некорректная или пустая морфология, базовое subject-verb agreement.
-- Sentence-level heuristics: длина, переносы строк, отсутствие глагола, базовая пунктуация.
-- Distribution checks: перекос POS, перекос dependency relation, необычная концентрация одного отношения.
-
-### Дизайн-принципы
-
-- Fail-fast для явно сломанных dependency trees.
-- Эвристическая оценка вместо претензии на абсолютную лингвистическую истинность.
-- Parser-agnostic интеграция через UD-подобные данные.
-- Объяснимость каждого решения.
-- Отсутствие мутаций исходных аннотаций.
-- Расширяемость: новые проверки, настраиваемые веса штрафов, логирование на уровне корпуса и будущий trainable scoring.
-
-### Пример использования
-
-```ts
-const result = annotationQualityFilter.evaluate(sentence);
-
-if (result.label === "REJECT") {
-  skip(sentence);
-}
-```
-
-### Использование в Python
-
-```py
-from annotation_quality_filter import evaluate
-
-result = evaluate(sentence)
-
-if result.label == "REJECT":
-    skip(sentence)
-```
-
-### Использование CLI
-
-```bash
-python -m annotation_quality_filter hollow.annotations.json --pretty
-python -m annotation_quality_filter hollow.annotations.json --limit 20 --jsonl
-python -m annotation_quality_filter hollow.annotations.json -o quality-results.json --pretty
-```
-
-CLI принимает один объект предложения, список предложений или Stanza-style JSON с массивом `sentences` на верхнем уровне.
-
-### Лицензия и использование
-
-Проект планируется публиковать с доступным исходным кодом для некоммерческого использования. Коммерческое использование запрещено, если владелец проекта не выдал отдельную лицензию.
-
-В репозитории добавлен non-commercial source-available `LICENSE`. Это намеренно не permissive OSI-style open-source лицензия, потому что коммерческое использование ограничено.
-
-Английская версия архитектуры находится в [docs/architecture.en.md](docs/architecture.en.md).
+This project is distributed under the repository license. See [`LICENSE`](LICENSE).

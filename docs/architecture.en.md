@@ -334,21 +334,40 @@ if (result.label === "REJECT") {
 Python API:
 
 ```py
-from annotation_quality_filter import evaluate
+from annotation_quality_filter import evaluate, filter_annotations
 
 result = evaluate(sentence)
 
 if result.label == "REJECT":
     skip(sentence)
+
+filtered_annotations, quality_result = filter_annotations(
+    annotations,
+    min_label="WEAK_ACCEPT",
+)
 ```
+
+`filter_annotations` returns a tuple:
+
+```py
+(filtered_annotations, quality_result)
+```
+
+`min_label` is a minimum quality level:
+
+- `ACCEPT` keeps only `ACCEPT`.
+- `WEAK_ACCEPT` keeps `ACCEPT` and `WEAK_ACCEPT`.
+- `REJECT` keeps every evaluated annotation.
 
 CLI:
 
 ```bash
-python -m annotation_quality_filter hollow.annotations.json --pretty
-python -m annotation_quality_filter hollow.annotations.json --limit 20 --jsonl
-python -m annotation_quality_filter hollow.annotations.json -o quality-results.json --pretty
+python -m annotation_quality_filter hollow.annotations.json --min-label WEAK_ACCEPT -o filtered.annotations.json --pretty
+python -m annotation_quality_filter hollow.annotations.json --min-label ACCEPT --quality-result -o filtered-with-quality.json --pretty
+python -m annotation_quality_filter hollow.annotations.json --min-label WEAK_ACCEPT --jsonl -o filtered.annotations.jsonl
 ```
+
+CLI always writes output to the file provided by `--output`. By default, CLI output is `filtered_annotations` only. With `--quality-result`, output contains both `filtered_annotations` and `quality_result`.
 
 ## Example
 
