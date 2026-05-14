@@ -1,0 +1,57 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-SCORE-013",
+  "expected_status": "succeeded",
+  "expected_error_code": null,
+  "expected_codes": [
+    "HEAD_WORD_ID_MISMATCH"
+  ],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": 0,
+  "expected_document_preserved": true,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "expected_quality_assertions": [
+    {
+      "scope": "sentence",
+      "text_unit_id": "ch1:text",
+      "sentence_id": "ch1:text:s1",
+      "entity_id": null,
+      "expected_issue_codes": [
+        "HEAD_WORD_ID_MISMATCH"
+      ],
+      "expected_issue_entities": [
+        {
+          "code": "HEAD_WORD_ID_MISMATCH",
+          "entity_type": "word",
+          "entity_id": "ch1:text:s1:w3",
+          "field": "head_word_id",
+          "path": null
+        }
+      ],
+      "expected_score": 0.9475,
+      "expected_band": "high",
+      "expected_risk_level": "medium",
+      "expected_warning_count": 1,
+      "expected_error_count": 0,
+      "expected_summary_assertions": {
+        "quality.summary.mean_sentence_score": 0.9475,
+        "quality.summary.high_quality_sentences": 1,
+        "quality.summary.warning_count": 1,
+        "quality.summary.error_count": 0
+      },
+      "notes": "thresholds.high is set exactly to 0.9475; high boundary is inclusive."
+    }
+  ],
+  "deterministic_generation": {
+    "kind": "fixture_mutation",
+    "recipe": "Use Q/TC-P1-005 fixture with config {\"thresholds\":{\"high\":0.9475,\"medium\":0.6,\"low\":0.3}}.",
+    "base_fixture": "docs/testing/fixtures/Q/TC-P1-005/stanza_annotation.json",
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "result validates against the public output schema when a JSON result is produced",
+    "all declared exact assertions are checked"
+  ]
+}

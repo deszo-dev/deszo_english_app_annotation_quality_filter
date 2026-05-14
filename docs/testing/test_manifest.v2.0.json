@@ -1,0 +1,1258 @@
+{
+  "manifest_version": "annotation_quality_filter_test_manifest.v2.0",
+  "description": "Stable test definitions for every registry tests[] reference. P0/P1 entries are automation targets; P2 entries may use generated fixtures from the same base fixture.",
+  "tests": [
+    {
+      "id": "TC-004",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "upstream_stanza_annotation_failed",
+        "upstream_failure_status_seen"
+      ],
+      "purpose": "Validate registry contract for upstream_stanza_annotation_failed, upstream_failure_status_seen.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F003/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/F003_upstream_failed.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "upstream_stanza_annotation_failed",
+        "upstream_failure_status_seen"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-005",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "unsupported_stanza_schema",
+        "unsupported_input_schema_version"
+      ],
+      "purpose": "Validate registry contract for unsupported_stanza_schema, unsupported_input_schema_version.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F004/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/F004_unsupported_schema.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "unsupported_stanza_schema",
+        "unsupported_input_schema_version"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-006",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_input"
+      ],
+      "purpose": "Validate registry contract for invalid_input.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F007/schema_invalid_missing_document.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/F007_invalid_input_schema.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_input",
+        "input_schema_validation_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-007",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_input",
+        "input_schema_validation_failed"
+      ],
+      "purpose": "Validate registry contract for invalid_input, input_schema_validation_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F007/schema_invalid_missing_document.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/F007_invalid_input_schema.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_input",
+        "input_schema_validation_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-008",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_config",
+        "config_schema_validation_failed"
+      ],
+      "purpose": "Validate registry contract for invalid_config, config_schema_validation_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/C002/quality_config.json",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/C002_invalid_config_schema.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_config",
+        "config_schema_validation_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-009",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_config",
+        "config_invariant_failed"
+      ],
+      "purpose": "Validate registry contract for invalid_config, config_invariant_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/C001/quality_config.json",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/C001_invalid_config.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_config",
+        "config_invariant_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-010",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_config"
+      ],
+      "purpose": "Validate registry contract for invalid_config.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/C001/quality_config.json",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/C001_invalid_config.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_config"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-011",
+      "priority": "P0",
+      "area": "quality_issue",
+      "registry_codes": [
+        "NO_ROOT"
+      ],
+      "purpose": "Validate registry contract for NO_ROOT.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-011/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-011.json",
+      "expected_diagnostics_or_issues": [
+        "NO_ROOT"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-012",
+      "priority": "P0",
+      "area": "quality_issue",
+      "registry_codes": [
+        "MULTIPLE_ROOTS"
+      ],
+      "purpose": "Validate registry contract for MULTIPLE_ROOTS.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-012/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-012.json",
+      "expected_diagnostics_or_issues": [
+        "MULTIPLE_ROOTS"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-013",
+      "priority": "P0",
+      "area": "quality_issue",
+      "registry_codes": [
+        "INVALID_HEAD_INDEX"
+      ],
+      "purpose": "Validate registry contract for INVALID_HEAD_INDEX.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-013/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-013.json",
+      "expected_diagnostics_or_issues": [
+        "INVALID_HEAD_INDEX"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-014",
+      "priority": "P0",
+      "area": "quality_issue",
+      "registry_codes": [
+        "TOKEN_WORD_REFERENCE_INVALID"
+      ],
+      "purpose": "Validate registry contract for TOKEN_WORD_REFERENCE_INVALID.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-014/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-014.json",
+      "expected_diagnostics_or_issues": [
+        "TOKEN_WORD_REFERENCE_INVALID"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-015",
+      "priority": "P0",
+      "area": "quality_issue",
+      "registry_codes": [
+        "SENTENCE_TEXT_MISMATCH"
+      ],
+      "purpose": "Validate registry contract for SENTENCE_TEXT_MISMATCH.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-015/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-015.json",
+      "expected_diagnostics_or_issues": [
+        "SENTENCE_TEXT_MISMATCH"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-016",
+      "priority": "P0",
+      "area": "quality_issue",
+      "registry_codes": [
+        "SENTENCE_TEXT_MISMATCH"
+      ],
+      "purpose": "Validate registry contract for SENTENCE_TEXT_MISMATCH.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-016/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/Q/TC-016/quality_config.json",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-016.json",
+      "expected_diagnostics_or_issues": [
+        "SENTENCE_TEXT_MISMATCH"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-017",
+      "priority": "P0",
+      "area": "quality_issue",
+      "registry_codes": [
+        "ENTITY_SPAN_INVALID",
+        "ENTITY_TEXT_MISMATCH"
+      ],
+      "purpose": "Validate registry contract for ENTITY_SPAN_INVALID, ENTITY_TEXT_MISMATCH.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-017/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-017.json",
+      "expected_diagnostics_or_issues": [
+        "ENTITY_SPAN_INVALID",
+        "ENTITY_TEXT_MISMATCH"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-020",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "NO_MAIN_VERB"
+      ],
+      "purpose": "Validate registry contract for NO_MAIN_VERB.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-020/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-020.json",
+      "expected_diagnostics_or_issues": [
+        "NO_MAIN_VERB"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-021",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "TOO_LONG_SENTENCE"
+      ],
+      "purpose": "Validate registry contract for TOO_LONG_SENTENCE.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-021/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/Q/TC-021/quality_config.json",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-021.json",
+      "expected_diagnostics_or_issues": [
+        "TOO_LONG_SENTENCE"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-025",
+      "priority": "P1",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "output_too_large",
+        "output_serialization_too_large"
+      ],
+      "purpose": "Validate registry contract for output_too_large, output_serialization_too_large.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/O001/quality_config.json",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/O001_output_too_large.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "output_too_large",
+        "output_serialization_too_large"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-031",
+      "priority": "P1",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "output_write_failed",
+        "output_channel_write_failed"
+      ],
+      "purpose": "Validate registry contract for output_write_failed, output_channel_write_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-031.json",
+      "expected_diagnostics_or_issues": [
+        "output_write_failed",
+        "output_channel_write_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-032",
+      "priority": "P1",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_input",
+        "input_json_parse_failed"
+      ],
+      "purpose": "Validate registry contract for invalid_input, input_json_parse_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/B001/malformed_input.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/B001_invalid_json_parse.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_input",
+        "input_json_parse_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-033",
+      "priority": "P1",
+      "area": "error_precedence",
+      "registry_codes": [
+        "unsupported_stanza_schema",
+        "unsupported_input_schema_version"
+      ],
+      "purpose": "Verify that unsupported schema version is reported before upstream failure status when both conditions are present.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F006/stanza_failed_unsupported_schema.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/F006_unsupported_schema_precedence.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "unsupported_stanza_schema",
+        "unsupported_input_schema_version"
+      ],
+      "assertions": [
+        "result.status == failed",
+        "result.error.code == unsupported_stanza_schema",
+        "diagnostics contains unsupported_input_schema_version at /schema_version",
+        "diagnostics does not contain upstream_failure_status_seen",
+        "document and quality are absent",
+        "CLI exit code == 1"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P0-002",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_config",
+        "config_schema_validation_failed"
+      ],
+      "purpose": "Validate registry contract for invalid_config, config_schema_validation_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/C002/quality_config.json",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/C002_invalid_config_schema.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_config",
+        "config_schema_validation_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P0-003",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_config",
+        "config_invariant_failed"
+      ],
+      "purpose": "Validate registry contract for invalid_config, config_invariant_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/C001/quality_config.json",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/C001_invalid_config.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_config",
+        "config_invariant_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P0-005",
+      "priority": "P0",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "invalid_input",
+        "input_json_parse_failed"
+      ],
+      "purpose": "Validate registry contract for invalid_input, input_json_parse_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/B001/malformed_input.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/B001_invalid_json_parse.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_input",
+        "input_json_parse_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-003",
+      "priority": "P1",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "output_write_failed",
+        "output_channel_write_failed"
+      ],
+      "purpose": "Validate registry contract for output_write_failed, output_channel_write_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-003.json",
+      "expected_diagnostics_or_issues": [
+        "output_write_failed",
+        "output_channel_write_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-005",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "HEAD_WORD_ID_MISMATCH"
+      ],
+      "purpose": "Validate registry contract for HEAD_WORD_ID_MISMATCH.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-005/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-005.json",
+      "expected_diagnostics_or_issues": [
+        "HEAD_WORD_ID_MISMATCH"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-006",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "DISCONNECTED_DEPENDENCY_TREE"
+      ],
+      "purpose": "Validate registry contract for DISCONNECTED_DEPENDENCY_TREE.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-006/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-006.json",
+      "expected_diagnostics_or_issues": [
+        "DISCONNECTED_DEPENDENCY_TREE"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-007",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "ORPHAN_DEPENDENCY_NODE"
+      ],
+      "purpose": "Validate registry contract for ORPHAN_DEPENDENCY_NODE.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-007/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-007.json",
+      "expected_diagnostics_or_issues": [
+        "ORPHAN_DEPENDENCY_NODE"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-008",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "EMPTY_SENTENCE_WORDS"
+      ],
+      "purpose": "Validate registry contract for EMPTY_SENTENCE_WORDS.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-008/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-008.json",
+      "expected_diagnostics_or_issues": [
+        "EMPTY_SENTENCE_WORDS"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-009",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "SENTENCE_SPAN_INVALID"
+      ],
+      "purpose": "Validate registry contract for SENTENCE_SPAN_INVALID.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-009/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-009.json",
+      "expected_diagnostics_or_issues": [
+        "SENTENCE_SPAN_INVALID"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-010",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "TOKEN_SPAN_INVALID"
+      ],
+      "purpose": "Validate registry contract for TOKEN_SPAN_INVALID.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-010/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-010.json",
+      "expected_diagnostics_or_issues": [
+        "TOKEN_SPAN_INVALID"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-011",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "WORD_SPAN_INVALID"
+      ],
+      "purpose": "Validate registry contract for WORD_SPAN_INVALID.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-011/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-011.json",
+      "expected_diagnostics_or_issues": [
+        "WORD_SPAN_INVALID"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-012",
+      "priority": "P1",
+      "area": "quality_issue",
+      "registry_codes": [
+        "CONTAINS_NEWLINE"
+      ],
+      "purpose": "Validate registry contract for CONTAINS_NEWLINE.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-012/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P1-012.json",
+      "expected_diagnostics_or_issues": [
+        "CONTAINS_NEWLINE"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P1-024",
+      "priority": "P1",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "input_schema_validation_failed"
+      ],
+      "purpose": "Validate registry contract for input_schema_validation_failed.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F007/schema_invalid_missing_document.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected/F007_invalid_input_schema.normalized.json",
+      "expected_diagnostics_or_issues": [
+        "invalid_input",
+        "input_schema_validation_failed"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-001",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "MISSING_SUBJECT"
+      ],
+      "purpose": "Validate registry contract for MISSING_SUBJECT.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-001/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-001.json",
+      "expected_diagnostics_or_issues": [
+        "MISSING_SUBJECT"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-002",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "BROKEN_AUX_CHAIN"
+      ],
+      "purpose": "Validate registry contract for BROKEN_AUX_CHAIN.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-002/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-002.json",
+      "expected_diagnostics_or_issues": [
+        "BROKEN_AUX_CHAIN"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-003",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "EXCESSIVE_CONJ"
+      ],
+      "purpose": "Validate registry contract for EXCESSIVE_CONJ.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-003/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-003.json",
+      "expected_diagnostics_or_issues": [
+        "EXCESSIVE_CONJ"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-004",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "SUSPICIOUS_DEPREL_PAIR"
+      ],
+      "purpose": "Validate registry contract for SUSPICIOUS_DEPREL_PAIR.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-004/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-004.json",
+      "expected_diagnostics_or_issues": [
+        "SUSPICIOUS_DEPREL_PAIR"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-005",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "INVALID_RELCL_ATTACHMENT"
+      ],
+      "purpose": "Validate registry contract for INVALID_RELCL_ATTACHMENT.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-005/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-005.json",
+      "expected_diagnostics_or_issues": [
+        "INVALID_RELCL_ATTACHMENT"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-006",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "MISSING_TENSE"
+      ],
+      "purpose": "Validate registry contract for MISSING_TENSE.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-006/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-006.json",
+      "expected_diagnostics_or_issues": [
+        "MISSING_TENSE"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-007",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "EMPTY_MORPHOLOGY"
+      ],
+      "purpose": "Validate registry contract for EMPTY_MORPHOLOGY.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-007/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-007.json",
+      "expected_diagnostics_or_issues": [
+        "EMPTY_MORPHOLOGY"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-008",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "AGREEMENT_MISMATCH"
+      ],
+      "purpose": "Validate registry contract for AGREEMENT_MISMATCH.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-008/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-008.json",
+      "expected_diagnostics_or_issues": [
+        "AGREEMENT_MISMATCH"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-009",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "POS_DISTRIBUTION_ANOMALY"
+      ],
+      "purpose": "Validate registry contract for POS_DISTRIBUTION_ANOMALY.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-009/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-009/quality_config.json",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-009.json",
+      "expected_diagnostics_or_issues": [
+        "POS_DISTRIBUTION_ANOMALY"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-010",
+      "priority": "P2",
+      "area": "quality_issue",
+      "registry_codes": [
+        "DEPREL_DISTRIBUTION_ANOMALY"
+      ],
+      "purpose": "Validate registry contract for DEPREL_DISTRIBUTION_ANOMALY.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-010/stanza_annotation.json",
+      "config_fixture_or_inline": "docs/testing/fixtures/Q/TC-P2-010/quality_config.json",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-010.json",
+      "expected_diagnostics_or_issues": [
+        "DEPREL_DISTRIBUTION_ANOMALY"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "TC-P2-011",
+      "priority": "P2",
+      "area": "error_or_diagnostic",
+      "registry_codes": [
+        "internal_error",
+        "unexpected_internal_error"
+      ],
+      "purpose": "Validate registry contract for internal_error, unexpected_internal_error.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md and corresponding registry entry",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/TC-P2-011.json",
+      "expected_diagnostics_or_issues": [
+        "internal_error",
+        "unexpected_internal_error"
+      ],
+      "assertions": [
+        "actual JSON result validates against the public output schema when a JSON result is produced",
+        "top-level error.code, diagnostics[].code, and quality issue code locations contain every expected code declared by this entry",
+        "document is preserved byte-for-byte/deep-equal on success and absent on top-level failure",
+        "summary/count fields match emitted quality records or failure contract",
+        "normalization removes only timestamps/durations/debug/temp paths explicitly allowed by the testing guide"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    }
+  ]
+}

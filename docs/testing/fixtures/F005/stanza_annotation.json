@@ -1,0 +1,51 @@
+{
+  "schema_version": "stanza_annotator.v2.0",
+  "status": "succeeded",
+  "document": {
+    "document_id": "book-001",
+    "source": {
+      "source_id": "src-001",
+      "filename": "tiny.epub",
+      "fingerprint": "bookfp001"
+    },
+    "book": {
+      "id": "book-001",
+      "title": "Tiny Book",
+      "language": "en",
+      "front_matter": [],
+      "chapters": [
+        {
+          "id": "ch1",
+          "title": "Chapter 1",
+          "footnotes": [],
+          "chapter_number": 1,
+          "type": "chapter",
+          "text": "",
+          "text_annotation_status": "skipped",
+          "text_skipped_reason": "empty_text"
+        }
+      ],
+      "back_matter": [],
+      "footnotes": []
+    }
+  },
+  "diagnostics": [],
+  "annotation": {
+    "annotator_version": "2.0.0-test",
+    "stanza_version": "1.8.2-test",
+    "source_book_fingerprint": "bookfp001",
+    "annotation_input_fingerprint": "annfp001",
+    "summary": {
+      "text_unit_count": 1,
+      "annotated_text_unit_count": 0,
+      "skipped_text_unit_count": 1,
+      "chapter_count": 1,
+      "sentence_count": 0,
+      "token_count": 0,
+      "word_count": 0,
+      "entity_count": 0,
+      "warning_count": 1,
+      "error_count": 0
+    }
+  }
+}

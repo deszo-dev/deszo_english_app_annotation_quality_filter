@@ -1,0 +1,34 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-CLI-135",
+  "expected_status": "cli_failed",
+  "expected_error_code": null,
+  "expected_codes": [],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": 2,
+  "expected_document_preserved": false,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "expected_cli_assertions": {
+    "command_template": "annotation-quality-filter evaluate - --config -",
+    "expected_stdout": "empty",
+    "expected_stderr": "usage_text",
+    "expected_files_created": [],
+    "expected_files_absent_or_unmodified": [],
+    "preconditions": [
+      "supply both input and config from stdin"
+    ]
+  },
+  "deterministic_generation": {
+    "kind": "filesystem_precondition",
+    "recipe": "Invoke CLI with INPUT.json=- and --config=-. Parser must reject because the CLI cannot read both from stdin.",
+    "base_fixture": null,
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "CLI exits 2",
+    "no JSON result is emitted",
+    "stderr contains safe usage error"
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "schema_version": "stanza_annotator.v2.0",
+  "status": "succeeded",
+  "document": {
+    "document_id": "book-001",
+    "source": {
+      "source_id": "src-001",
+      "filename": "tiny.epub",
+      "fingerprint": "bookfp001"
+    },
+    "book": {
+      "id": "book-001",
+      "title": "Tiny Book",
+      "language": "en",
+      "front_matter": [],
+      "chapters": [
+        {
+          "id": "ch1",
+          "title": "Chapter 1",
+          "footnotes": [],
+          "chapter_number": 1,
+          "type": "chapter",
+          "text": "Alice sees Bob.",
+          "text_annotation": {
+            "text_unit_id": "ch1:text",
+            "ref": {
+              "kind": "chapter_text",
+              "text_unit_id": "ch1:text",
+              "owner_type": "chapter",
+              "owner_id": "ch1",
+              "source_field": "text"
+            },
+            "text": "Alice sees Bob.",
+            "sentences": [
+              {
+                "id": "ch1:text:s1",
+                "text_unit_id": "ch1:text",
+                "sentence_number": 1,
+                "text": "Alice sees Bob.",
+                "start_char": 0,
+                "end_char": 15,
+                "tokens": [
+                  {
+                    "id": "ch1:text:s1:t1",
+                    "text_unit_id": "ch1:text",
+                    "sentence_id": "ch1:text:s1",
+                    "token_number": 1,
+                    "text": "Alice",
+                    "start_char": 0,
+                    "end_char": 5,
+                    "word_ids": [
+                      "ch1:text:s1:w1"
+                    ]
+                  },
+                  {
+                    "id": "ch1:text:s1:t2",
+                    "text_unit_id": "ch1:text",
+                    "sentence_id": "ch1:text:s1",
+                    "token_number": 2,
+                    "text": "sees",
+                    "start_char": 6,
+                    "end_char": 10,
+                    "word_ids": [
+                      "ch1:text:s1:w2"
+                    ]
+                  },
+                  {
+                    "id": "ch1:text:s1:t3",
+                    "text_unit_id": "ch1:text",
+                    "sentence_id": "ch1:text:s1",
+                    "token_number": 3,
+                    "text": "Bob",
+                    "start_char": 11,
+                    "end_char": 14,
+                    "word_ids": [
+                      "ch1:text:s1:w3"
+                    ]
+                  },
+                  {
+                    "id": "ch1:text:s1:t4",
+                    "text_unit_id": "ch1:text",
+                    "sentence_id": "ch1:text:s1",
+                    "token_number": 4,
+                    "text": ".",
+                    "start_char": 14,
+                    "end_char": 15,
+                    "word_ids": [
+                      "ch1:text:s1:w4"
+                    ]
+                  }
+                ],
+                "words": [
+                  {
+                    "id": "ch1:text:s1:w1",
+                    "text_unit_id": "ch1:text",
+                    "sentence_id": "ch1:text:s1",
+                    "word_number": 1,
+                    "text": "Alice",
+                    "lemma": "Alice",
+                    "upos": "PROPN",
+                    "xpos": "NNP",
+                    "feats": "Number=Sing",
+                    "head": 3,
+                    "head_word_id": "ch1:text:s1:w3",
+                    "deprel": "nsubj",
+                    "start_char": 0,
+                    "end_char": 5
+                  },
+                  {
+                    "id": "ch1:text:s1:w2",
+                    "text_unit_id": "ch1:text",
+                    "sentence_id": "ch1:text:s1",
+                    "word_number": 2,
+                    "text": "sees",
+                    "lemma": "see",
+                    "upos": "VERB",
+                    "xpos": "VBZ",
+                    "feats": "Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin",
+                    "head": 0,
+                    "deprel": "root",
+                    "start_char": 6,
+                    "end_char": 10
+                  },
+                  {
+                    "id": "ch1:text:s1:w3",
+                    "text_unit_id": "ch1:text",
+                    "sentence_id": "ch1:text:s1",
+                    "word_number": 3,
+                    "text": "Bob",
+                    "lemma": "Bob",
+                    "upos": "PROPN",
+                    "xpos": "NNP",
+                    "feats": "Number=Sing",
+                    "head": 1,
+                    "head_word_id": "ch1:text:s1:w1",
+                    "deprel": "obj",
+                    "start_char": 11,
+                    "end_char": 14
+                  },
+                  {
+                    "id": "ch1:text:s1:w4",
+                    "text_unit_id": "ch1:text",
+                    "sentence_id": "ch1:text:s1",
+                    "word_number": 4,
+                    "text": ".",
+                    "lemma": ".",
+                    "upos": "PUNCT",
+                    "xpos": ".",
+                    "feats": "_",
+                    "head": 2,
+                    "head_word_id": "ch1:text:s1:w2",
+                    "deprel": "punct",
+                    "start_char": 14,
+                    "end_char": 15
+                  }
+                ]
+              }
+            ],
+            "entities": [
+              {
+                "id": "ch1:text:e1",
+                "text_unit_id": "ch1:text",
+                "entity_number": 1,
+                "text": "Alice",
+                "type": "PERSON",
+                "start_char": 0,
+                "end_char": 5
+              },
+              {
+                "id": "ch1:text:e2",
+                "text_unit_id": "ch1:text",
+                "entity_number": 2,
+                "text": "Bob",
+                "type": "PERSON",
+                "start_char": 11,
+                "end_char": 14
+              }
+            ],
+            "summary": {
+              "sentence_count": 1,
+              "token_count": 4,
+              "word_count": 4,
+              "entity_count": 2
+            }
+          },
+          "text_annotation_status": "annotated"
+        }
+      ],
+      "back_matter": [],
+      "footnotes": []
+    }
+  },
+  "diagnostics": [],
+  "annotation": {
+    "annotator_version": "2.0.0-test",
+    "stanza_version": "1.8.2-test",
+    "source_book_fingerprint": "bookfp001",
+    "annotation_input_fingerprint": "annfp001",
+    "summary": {
+      "text_units_seen": 1,
+      "text_units_annotated": 1,
+      "sentences": 1,
+      "tokens": 4,
+      "words": 4,
+      "entities": 2
+    }
+  }
+}

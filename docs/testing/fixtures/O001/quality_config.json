@@ -1,0 +1,5 @@
+{
+  "limits": {
+    "max_output_json_bytes": 1
+  }
+}

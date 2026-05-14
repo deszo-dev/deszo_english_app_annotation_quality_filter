@@ -1,0 +1,1169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deszo.local/schema/stanza_annotator.v2.0.schema.json",
+  "title": "StanzaAnnotationResult v2.0 strict consumed subset for annotation_quality_filter",
+  "$ref": "#/$defs/StanzaAnnotationResultConsumedSubset",
+  "$defs": {
+    "StanzaAnnotationResultConsumedSubset": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "schema_version",
+        "status",
+        "diagnostics",
+        "annotation"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "stanza_annotator.v2.0"
+        },
+        "status": {
+          "enum": [
+            "succeeded",
+            "failed"
+          ]
+        },
+        "document": {
+          "$ref": "#/$defs/ConsumedDocument"
+        },
+        "error": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "annotation": {
+          "$ref": "#/$defs/AnnotationRunMetadata"
+        },
+        "debug": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "succeeded"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "document"
+            ]
+          }
+        }
+      ],
+      "description": "Strict consumed subset of StanzaAnnotationResult v2.0 used by annotation_quality_filter. Additional upstream-owned fields are allowed, but consumed fields are typed and required where traversed.",
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "sentences"
+            ]
+          },
+          {
+            "required": [
+              "entities"
+            ]
+          }
+        ]
+      }
+    },
+    "ConsumedDocument": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "book"
+      ],
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "book": {
+          "$ref": "#/$defs/ConsumedBook"
+        }
+      }
+    },
+    "ConsumedBook": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "chapters"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "language": {
+          "type": "string"
+        },
+        "authors": {
+          "type": "array"
+        },
+        "contributors": {
+          "type": "array"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "front_matter": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FrontMatterItem"
+          },
+          "default": []
+        },
+        "chapters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChapterItem"
+          }
+        },
+        "back_matter": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BackMatterItem"
+          },
+          "default": []
+        },
+        "footnotes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FootnoteContainer"
+          },
+          "default": []
+        },
+        "table_of_contents": {
+          "type": "array"
+        },
+        "assets": {
+          "type": "array"
+        }
+      }
+    },
+    "ChapterItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "chapter_number",
+        "type",
+        "text",
+        "text_annotation_status",
+        "footnotes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chapter_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "title_annotation_status": {
+          "enum": [
+            "annotated",
+            "skipped"
+          ]
+        },
+        "title_skipped_reason": {
+          "enum": [
+            "excluded_by_config",
+            "empty_text",
+            "too_large"
+          ]
+        },
+        "title_annotation": {
+          "$ref": "#/$defs/TextUnitAnnotation"
+        },
+        "text": {
+          "type": "string"
+        },
+        "text_annotation_status": {
+          "enum": [
+            "annotated",
+            "skipped"
+          ]
+        },
+        "text_skipped_reason": {
+          "enum": [
+            "excluded_by_config",
+            "empty_text",
+            "too_large"
+          ]
+        },
+        "text_annotation": {
+          "$ref": "#/$defs/TextUnitAnnotation"
+        },
+        "footnotes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FootnoteContainer"
+          }
+        }
+      },
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "paragraphs"
+            ]
+          },
+          {
+            "required": [
+              "skip_reason"
+            ]
+          }
+        ]
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "text_annotation_status": {
+                "const": "annotated"
+              }
+            },
+            "required": [
+              "text_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "text_annotation"
+            ],
+            "not": {
+              "required": [
+                "text_skipped_reason"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "text_annotation_status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "text_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "text_skipped_reason"
+            ],
+            "not": {
+              "required": [
+                "text_annotation"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "title_annotation_status": {
+                "const": "annotated"
+              }
+            },
+            "required": [
+              "title_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "title_annotation"
+            ],
+            "not": {
+              "required": [
+                "title_skipped_reason"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "title_annotation_status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "title_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "title_skipped_reason"
+            ],
+            "not": {
+              "required": [
+                "title_annotation"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "FrontMatterItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "type",
+        "text",
+        "paragraphs",
+        "footnotes",
+        "included_in_canonical_text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "title_annotation_status": {
+          "enum": [
+            "annotated",
+            "skipped"
+          ]
+        },
+        "title_skipped_reason": {
+          "enum": [
+            "excluded_by_config",
+            "empty_text",
+            "too_large"
+          ]
+        },
+        "title_annotation": {
+          "$ref": "#/$defs/TextUnitAnnotation"
+        },
+        "text": {
+          "type": "string"
+        },
+        "text_annotation_status": {
+          "enum": [
+            "annotated",
+            "skipped"
+          ]
+        },
+        "text_skipped_reason": {
+          "enum": [
+            "excluded_by_config",
+            "empty_text",
+            "too_large"
+          ]
+        },
+        "text_annotation": {
+          "$ref": "#/$defs/TextUnitAnnotation"
+        },
+        "paragraphs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EpubParagraph"
+          }
+        },
+        "footnotes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FootnoteContainer"
+          }
+        },
+        "included_in_canonical_text": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "text_annotation_status": {
+                "const": "annotated"
+              }
+            },
+            "required": [
+              "text_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "text_annotation"
+            ],
+            "not": {
+              "required": [
+                "text_skipped_reason"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "text_annotation_status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "text_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "text_skipped_reason"
+            ],
+            "not": {
+              "required": [
+                "text_annotation"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "title_annotation_status": {
+                "const": "annotated"
+              }
+            },
+            "required": [
+              "title_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "title_annotation"
+            ],
+            "not": {
+              "required": [
+                "title_skipped_reason"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "title_annotation_status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "title_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "title_skipped_reason"
+            ],
+            "not": {
+              "required": [
+                "title_annotation"
+              ]
+            }
+          }
+        }
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "skip_reason"
+            ]
+          }
+        ]
+      }
+    },
+    "BackMatterItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "type",
+        "text",
+        "paragraphs",
+        "footnotes",
+        "included_in_canonical_text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "title_annotation_status": {
+          "enum": [
+            "annotated",
+            "skipped"
+          ]
+        },
+        "title_skipped_reason": {
+          "enum": [
+            "excluded_by_config",
+            "empty_text",
+            "too_large"
+          ]
+        },
+        "title_annotation": {
+          "$ref": "#/$defs/TextUnitAnnotation"
+        },
+        "text": {
+          "type": "string"
+        },
+        "text_annotation_status": {
+          "enum": [
+            "annotated",
+            "skipped"
+          ]
+        },
+        "text_skipped_reason": {
+          "enum": [
+            "excluded_by_config",
+            "empty_text",
+            "too_large"
+          ]
+        },
+        "text_annotation": {
+          "$ref": "#/$defs/TextUnitAnnotation"
+        },
+        "paragraphs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EpubParagraph"
+          }
+        },
+        "footnotes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FootnoteContainer"
+          }
+        },
+        "included_in_canonical_text": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "text_annotation_status": {
+                "const": "annotated"
+              }
+            },
+            "required": [
+              "text_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "text_annotation"
+            ],
+            "not": {
+              "required": [
+                "text_skipped_reason"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "text_annotation_status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "text_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "text_skipped_reason"
+            ],
+            "not": {
+              "required": [
+                "text_annotation"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "title_annotation_status": {
+                "const": "annotated"
+              }
+            },
+            "required": [
+              "title_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "title_annotation"
+            ],
+            "not": {
+              "required": [
+                "title_skipped_reason"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "title_annotation_status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "title_annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "title_skipped_reason"
+            ],
+            "not": {
+              "required": [
+                "title_annotation"
+              ]
+            }
+          }
+        }
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "skip_reason"
+            ]
+          }
+        ]
+      }
+    },
+    "FootnoteContainer": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "text",
+        "annotation_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "marker": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "paragraph_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "annotation_status": {
+          "enum": [
+            "annotated",
+            "skipped"
+          ]
+        },
+        "skipped_reason": {
+          "enum": [
+            "excluded_by_config",
+            "empty_text",
+            "too_large"
+          ]
+        },
+        "annotation": {
+          "$ref": "#/$defs/TextUnitAnnotation"
+        }
+      },
+      "not": {
+        "required": [
+          "skip_reason"
+        ]
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "annotation_status": {
+                "const": "annotated"
+              }
+            },
+            "required": [
+              "annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "annotation"
+            ],
+            "not": {
+              "required": [
+                "skipped_reason"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "annotation_status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "annotation_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "skipped_reason"
+            ],
+            "not": {
+              "required": [
+                "annotation"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "AnnotationRunMetadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "summary"
+      ],
+      "properties": {
+        "annotator_version": {
+          "type": "string"
+        },
+        "stanza_version": {
+          "type": "string"
+        },
+        "source_book_fingerprint": {
+          "type": "string"
+        },
+        "annotation_input_fingerprint": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "TextUnitRef": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "kind",
+        "text_unit_id",
+        "owner_type",
+        "owner_id",
+        "source_field"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "chapter_text",
+            "section_text",
+            "chapter_title",
+            "section_title",
+            "footnote"
+          ]
+        },
+        "text_unit_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner_type": {
+          "enum": [
+            "chapter",
+            "front_matter",
+            "back_matter",
+            "book"
+          ]
+        },
+        "owner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "footnote_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_field": {
+          "enum": [
+            "title",
+            "text"
+          ]
+        }
+      },
+      "description": "Consumed TextUnitRef emitted by stanza_annotator.v2.0. Paragraph refs are forbidden; main chapter content is chapter_text."
+    },
+    "TextUnitAnnotation": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "text_unit_id",
+        "ref",
+        "text",
+        "sentences",
+        "entities",
+        "summary"
+      ],
+      "properties": {
+        "text_unit_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ref": {
+          "$ref": "#/$defs/TextUnitRef"
+        },
+        "text": {
+          "type": "string"
+        },
+        "sentences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnnotatedSentence"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnnotatedEntity"
+          }
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "AnnotatedSentence": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "text_unit_id",
+        "sentence_number",
+        "text",
+        "start_char",
+        "end_char",
+        "tokens",
+        "words"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_unit_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sentence_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "text": {
+          "type": "string"
+        },
+        "start_char": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_char": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnnotatedToken"
+          }
+        },
+        "words": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnnotatedWord"
+          }
+        }
+      }
+    },
+    "AnnotatedToken": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "text_unit_id",
+        "sentence_id",
+        "token_number",
+        "text",
+        "start_char",
+        "end_char",
+        "word_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_unit_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sentence_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "token_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "text": {
+          "type": "string"
+        },
+        "start_char": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_char": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "word_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "AnnotatedWord": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "text_unit_id",
+        "sentence_id",
+        "word_number",
+        "text",
+        "lemma",
+        "upos",
+        "head",
+        "deprel",
+        "start_char",
+        "end_char"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_unit_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sentence_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "word_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lemma": {
+          "type": "string"
+        },
+        "upos": {
+          "type": "string",
+          "minLength": 1
+        },
+        "xpos": {
+          "type": "string"
+        },
+        "feats": {
+          "type": "string"
+        },
+        "head": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "head_word_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deprel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start_char": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_char": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "AnnotatedEntity": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "text_unit_id",
+        "entity_number",
+        "text",
+        "type",
+        "start_char",
+        "end_char"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_unit_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "entity_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "text": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "start_char": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_char": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "EpubParagraph": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "paragraph_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "annotation_status"
+            ]
+          },
+          {
+            "required": [
+              "skipped_reason"
+            ]
+          },
+          {
+            "required": [
+              "skip_reason"
+            ]
+          },
+          {
+            "required": [
+              "annotation"
+            ]
+          },
+          {
+            "required": [
+              "text_annotation"
+            ]
+          },
+          {
+            "required": [
+              "title_annotation"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

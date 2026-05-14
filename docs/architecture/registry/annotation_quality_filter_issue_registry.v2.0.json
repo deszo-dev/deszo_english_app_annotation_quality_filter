@@ -1,0 +1,459 @@
+{
+  "registry_version": "annotation_quality_filter_issue_registry.v2.0",
+  "compatibility": "Issue codes, severities, and result impacts are public compatibility contract for v2.x.",
+  "codes": [
+    {
+      "code": "NO_ROOT",
+      "severity": "error",
+      "entity_type": "sentence",
+      "when_emitted": "No word in the sentence has head = 0.",
+      "result_impact": "hard invalid for the scoped item; score = 0.0; band = invalid; risk_level = critical for sentence scope; document preserved",
+      "message_template": "NO_ROOT: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-011"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "hard_invalid"
+      }
+    },
+    {
+      "code": "MULTIPLE_ROOTS",
+      "severity": "error",
+      "entity_type": "sentence",
+      "when_emitted": "More than one word in the sentence has head = 0.",
+      "result_impact": "hard invalid for the scoped item; score = 0.0; band = invalid; risk_level = critical for sentence scope; document preserved",
+      "message_template": "MULTIPLE_ROOTS: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-012"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "hard_invalid"
+      }
+    },
+    {
+      "code": "INVALID_HEAD_INDEX",
+      "severity": "error",
+      "entity_type": "word",
+      "when_emitted": "A word head is outside [0, len(words)].",
+      "result_impact": "hard invalid for the scoped item; score = 0.0; band = invalid; risk_level = critical for sentence scope; document preserved",
+      "message_template": "INVALID_HEAD_INDEX: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-013"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "hard_invalid"
+      }
+    },
+    {
+      "code": "HEAD_WORD_ID_MISMATCH",
+      "severity": "warning",
+      "entity_type": "word",
+      "when_emitted": "head_word_id does not match the word resolved by numeric head.",
+      "result_impact": "subtract 0.15 from the dependency family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "HEAD_WORD_ID_MISMATCH: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P1-005"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.15
+      }
+    },
+    {
+      "code": "TOKEN_WORD_REFERENCE_INVALID",
+      "severity": "error",
+      "entity_type": "token",
+      "when_emitted": "A token word_ids entry does not reference a word in the same sentence.",
+      "result_impact": "hard invalid for the scoped item; score = 0.0; band = invalid; risk_level = critical for sentence scope; document preserved",
+      "message_template": "TOKEN_WORD_REFERENCE_INVALID: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-014"
+      ],
+      "family": "structural",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "hard_invalid"
+      }
+    },
+    {
+      "code": "DISCONNECTED_DEPENDENCY_TREE",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "Dependency tree is not connected when interpreted over sentence words.",
+      "result_impact": "subtract 0.25 from the dependency family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "DISCONNECTED_DEPENDENCY_TREE: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P1-006"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.25
+      }
+    },
+    {
+      "code": "ORPHAN_DEPENDENCY_NODE",
+      "severity": "warning",
+      "entity_type": "word",
+      "when_emitted": "A dependency node cannot be connected to root or any valid head.",
+      "result_impact": "subtract 0.1 from the dependency family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "ORPHAN_DEPENDENCY_NODE: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P1-007"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.1
+      }
+    },
+    {
+      "code": "EMPTY_SENTENCE_WORDS",
+      "severity": "error",
+      "entity_type": "sentence",
+      "when_emitted": "An evaluated sentence has zero words.",
+      "result_impact": "hard invalid for the scoped item; score = 0.0; band = invalid; risk_level = critical for sentence scope; document preserved",
+      "message_template": "EMPTY_SENTENCE_WORDS: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P1-008"
+      ],
+      "family": "structural",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "hard_invalid"
+      }
+    },
+    {
+      "code": "SENTENCE_TEXT_MISMATCH",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "Sentence text differs from the referenced text-unit slice and validate_text_slices is enabled.",
+      "result_impact": "subtract 0.2 from the structural family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "SENTENCE_TEXT_MISMATCH: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-015",
+        "TC-016"
+      ],
+      "family": "structural",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.2
+      }
+    },
+    {
+      "code": "SENTENCE_SPAN_INVALID",
+      "severity": "error",
+      "entity_type": "sentence",
+      "when_emitted": "Sentence start_char/end_char span is invalid.",
+      "result_impact": "hard invalid for the scoped item; score = 0.0; band = invalid; risk_level = critical for sentence scope; document preserved",
+      "message_template": "SENTENCE_SPAN_INVALID: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P1-009"
+      ],
+      "family": "structural",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "hard_invalid"
+      }
+    },
+    {
+      "code": "TOKEN_SPAN_INVALID",
+      "severity": "warning",
+      "entity_type": "token",
+      "when_emitted": "Token start_char/end_char span is invalid while sentence evaluation can continue.",
+      "result_impact": "subtract 0.1 from the structural family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "TOKEN_SPAN_INVALID: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P1-010"
+      ],
+      "family": "structural",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.1
+      }
+    },
+    {
+      "code": "WORD_SPAN_INVALID",
+      "severity": "warning",
+      "entity_type": "word",
+      "when_emitted": "Word start_char/end_char span is invalid while sentence evaluation can continue.",
+      "result_impact": "subtract 0.1 from the structural family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "WORD_SPAN_INVALID: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P1-011"
+      ],
+      "family": "structural",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.1
+      }
+    },
+    {
+      "code": "ENTITY_SPAN_INVALID",
+      "severity": "error",
+      "entity_type": "entity",
+      "when_emitted": "Entity start_char/end_char span is invalid.",
+      "result_impact": "hard invalid for the scoped item; score = 0.0; band = invalid; risk_level = critical for sentence scope; document preserved",
+      "message_template": "ENTITY_SPAN_INVALID: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-017"
+      ],
+      "family": "entity",
+      "scope": "entity",
+      "score_effect": {
+        "mode": "hard_invalid"
+      }
+    },
+    {
+      "code": "ENTITY_TEXT_MISMATCH",
+      "severity": "warning",
+      "entity_type": "entity",
+      "when_emitted": "Entity text differs from the referenced text-unit slice.",
+      "result_impact": "subtract 0.25 from the entity family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "ENTITY_TEXT_MISMATCH: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-017"
+      ],
+      "family": "entity",
+      "scope": "entity",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.25
+      }
+    },
+    {
+      "code": "MISSING_SUBJECT",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "Sentence has at least one finite verb-like word (upos in {VERB,AUX} and feats contains VerbForm=Fin) and no word has deprel in {nsubj,nsubj:pass,csubj,csubj:pass,expl}.",
+      "result_impact": "subtract 0.2 from the dependency family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "MISSING_SUBJECT: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-001"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.2
+      }
+    },
+    {
+      "code": "BROKEN_AUX_CHAIN",
+      "severity": "warning",
+      "entity_type": "word",
+      "when_emitted": "Word has deprel in {aux,aux:pass,cop}; its resolved head exists; and resolved head upos is not one of {VERB,AUX,ADJ,NOUN,PROPN,PRON}.",
+      "result_impact": "subtract 0.15 from the dependency family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "BROKEN_AUX_CHAIN: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-002"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.15
+      }
+    },
+    {
+      "code": "EXCESSIVE_CONJ",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "conj_ratio = count(non-punctuation words with deprel == conj) / count(non-punctuation words); emit once when ratio exceeds max_conj_ratio. If it also exceeds severe_conj_ratio in v2.0, do not emit another issue and do not apply an additional penalty.",
+      "result_impact": "subtract the single registry penalty 0.15 from the dependency family score once for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "EXCESSIVE_CONJ: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-003"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.15
+      }
+    },
+    {
+      "code": "SUSPICIOUS_DEPREL_PAIR",
+      "severity": "warning",
+      "entity_type": "word",
+      "when_emitted": "Emit only when the dependent/head pair matches the v2.0 suspicious pair list: (deprel=nsubj, dependent_upos=PUNCT), (deprel=obj, dependent_upos=PUNCT), or (deprel=det, head_upos=VERB).",
+      "result_impact": "subtract 0.1 from the dependency family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "SUSPICIOUS_DEPREL_PAIR: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-004"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.1
+      }
+    },
+    {
+      "code": "INVALID_RELCL_ATTACHMENT",
+      "severity": "warning",
+      "entity_type": "word",
+      "when_emitted": "Word has deprel == acl:relcl and its resolved head upos is not one of {NOUN,PROPN,PRON}.",
+      "result_impact": "subtract 0.15 from the dependency family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "INVALID_RELCL_ATTACHMENT: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-005"
+      ],
+      "family": "dependency",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.15
+      }
+    },
+    {
+      "code": "MISSING_TENSE",
+      "severity": "warning",
+      "entity_type": "word",
+      "when_emitted": "Word has upos in {VERB,AUX}, feats contains VerbForm=Fin, and feats does not contain Tense=.",
+      "result_impact": "subtract 0.15 from the morphology family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "MISSING_TENSE: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-006"
+      ],
+      "family": "morphology",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.15
+      }
+    },
+    {
+      "code": "EMPTY_MORPHOLOGY",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "empty_feats_ratio = count(non-punctuation words where feats is absent, empty string, or _) / count(non-punctuation words); emit once when ratio exceeds 0.5. If it also exceeds 0.7 in v2.0, do not emit another issue and do not apply an additional penalty.",
+      "result_impact": "subtract the single registry penalty 0.1 from the morphology family score once for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "EMPTY_MORPHOLOGY: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-007"
+      ],
+      "family": "morphology",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.1
+      }
+    },
+    {
+      "code": "AGREEMENT_MISMATCH",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "Emit only for the minimal explicit-number case: finite present-tense verb with Person=3|Number=Sing whose nsubj dependent has Number=Plur, or finite present-tense verb with Number=Plur whose nsubj dependent has Number=Sing.",
+      "result_impact": "subtract 0.2 from the morphology family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "AGREEMENT_MISMATCH: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-008"
+      ],
+      "family": "morphology",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.2
+      }
+    },
+    {
+      "code": "TOO_LONG_SENTENCE",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "len(words) exceeds long_sentence_soft, max_sentence_length, or long_sentence_hard; emit once when any threshold is exceeded. v2.0 applies the single registry penalty regardless of how many thresholds are exceeded.",
+      "result_impact": "subtract the single registry penalty 0.15 from the sentence family score once for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "TOO_LONG_SENTENCE: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-021"
+      ],
+      "family": "sentence",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.15
+      }
+    },
+    {
+      "code": "CONTAINS_NEWLINE",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "Sentence text contains a newline.",
+      "result_impact": "subtract 0.1 from the sentence family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "CONTAINS_NEWLINE: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P1-012"
+      ],
+      "family": "sentence",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.1
+      }
+    },
+    {
+      "code": "NO_MAIN_VERB",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "No word has upos in {VERB,AUX} in a sentence where sentence checks are enabled.",
+      "result_impact": "subtract 0.2 from the sentence family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "NO_MAIN_VERB: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-020"
+      ],
+      "family": "sentence",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.2
+      }
+    },
+    {
+      "code": "POS_DISTRIBUTION_ANOMALY",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "noun_ratio = count(non-punctuation words with upos in {NOUN,PROPN,PRON}) / count(non-punctuation words); emit when noun_ratio > config.limits.max_noun_ratio.",
+      "result_impact": "subtract 0.1 from the distribution family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "POS_DISTRIBUTION_ANOMALY: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-009"
+      ],
+      "family": "distribution",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.1
+      }
+    },
+    {
+      "code": "DEPREL_DISTRIBUTION_ANOMALY",
+      "severity": "warning",
+      "entity_type": "sentence",
+      "when_emitted": "max_deprel_ratio = maximum frequency of any non-empty deprel among non-punctuation words / count(non-punctuation words); emit when max_deprel_ratio > config.limits.max_deprel_ratio.",
+      "result_impact": "subtract 0.1 from the distribution family score for the scoped item; clamp family score to [0.0, 1.0]; document preserved",
+      "message_template": "DEPREL_DISTRIBUTION_ANOMALY: {entity_type} {entity_id}.",
+      "tests": [
+        "TC-P2-010"
+      ],
+      "family": "distribution",
+      "scope": "sentence",
+      "score_effect": {
+        "mode": "penalty",
+        "penalty": 0.1
+      }
+    }
+  ]
+}

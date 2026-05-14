@@ -9,9 +9,14 @@ from annotation_quality_filter import (
     AnnotationQualityFilter,
     EntityFilteringConfig,
     InputValidationError,
+    RuntimeDependency,
     Thresholds,
+    canonical_json,
+    directory_source_fingerprint,
     filter_document,
     filter_with_status,
+    pipeline_runtime_metadata,
+    stage_fingerprint,
 )
 from annotation_quality_filter.evaluator import (
     filter_entities_for_sentences,
@@ -261,3 +266,67 @@ def test_cli_expected_data_error_returns_1_without_partial_output(tmp_path):
 
     assert result.returncode == 1
     assert not output_path.exists()
+
+
+def test_all_stages_expose_runtime_metadata():
+    metadata = pipeline_runtime_metadata()
+
+    assert metadata.stages
+
+    for stage_name, stage_metadata in metadata.stages.items():
+        assert stage_metadata.stage_name == stage_name
+        assert stage_metadata.stage_contract_version
+        assert stage_metadata.output_schema_version
+        assert stage_metadata.config_contract_version
+        assert stage_metadata.module_version
+
+
+def test_local_dependencies_have_source_fingerprints():
+    metadata = pipeline_runtime_metadata()
+
+    for stage in metadata.stages.values():
+        assert stage.source_fingerprint is not None
+        assert stage.source_fingerprint.startswith(("git:", "tree-sha256:", "build:"))
+
+        local_dependency = RuntimeDependency(
+            name="local-component",
+            version="0.1.0",
+            source="local-path",
+            compatibility="hash_exact",
+            source_fingerprint="tree-sha256:abc",
+        )
+        for dependency in [*stage.dependencies, local_dependency]:
+            if dependency.source in {"local-path", "editable-install"}:
+                assert dependency.source_fingerprint is not None
+                assert dependency.compatibility == "hash_exact"
+
+
+def test_runtime_metadata_is_deterministic():
+    first = canonical_json(pipeline_runtime_metadata())
+    second = canonical_json(pipeline_runtime_metadata())
+
+    assert first == second
+
+
+def test_stage_fingerprint_changes_when_config_changes():
+    stage_metadata = AnnotationQualityFilter().runtime_metadata()
+    default_fingerprint = stage_fingerprint(stage_metadata, AnnotationQualityConfig())
+    strict_fingerprint = stage_fingerprint(
+        stage_metadata,
+        AnnotationQualityConfig(retention_policy="ACCEPT_ONLY"),
+    )
+
+    assert default_fingerprint != strict_fingerprint
+
+
+def test_directory_source_fingerprint_changes_when_relevant_source_changes(tmp_path):
+    source_root = tmp_path / "component"
+    source_root.mkdir()
+    source_file = source_root / "stage.py"
+    source_file.write_text("VALUE = 1\n", encoding="utf-8")
+
+    before = directory_source_fingerprint(source_root)
+    source_file.write_text("VALUE = 2\n", encoding="utf-8")
+    after = directory_source_fingerprint(source_root)
+
+    assert before != after

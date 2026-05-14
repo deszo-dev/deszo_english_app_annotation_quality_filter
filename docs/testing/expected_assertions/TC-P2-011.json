@@ -1,0 +1,27 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "TC-P2-011",
+  "expected_status": "failed",
+  "expected_error_code": "internal_error",
+  "expected_codes": [
+    "internal_error",
+    "unexpected_internal_error"
+  ],
+  "expected_cli_exit_code": 99,
+  "expected_document_preserved": false,
+  "fixture_mutation_summary": "Use the checked-in fixture/config named by this manifest entry without additional human interpretation.",
+  "expected_score_rule": "If status is succeeded, issue penalties and bands MUST be computed from the registry score_effect and deterministic scoring contract.",
+  "required_assertions": [
+    "an injected unexpected checker defect is converted to internal_error when possible",
+    "diagnostics contain unexpected_internal_error",
+    "debug/privacy rules still apply",
+    "recoverable is false"
+  ],
+  "expected_api_assertions": {
+    "call_template": "evaluate_stanza_result(input_data=<fixture triggering unexpected implementation defect>, config={})",
+    "expected_exception": null,
+    "input_mutation_allowed": false,
+    "filesystem_access_allowed": false,
+    "network_access_allowed": false
+  }
+}

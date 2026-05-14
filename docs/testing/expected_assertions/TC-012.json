@@ -1,0 +1,61 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "TC-012",
+  "expected_status": "succeeded",
+  "expected_error_code": null,
+  "expected_codes": [
+    "MULTIPLE_ROOTS"
+  ],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": 0,
+  "expected_document_preserved": true,
+  "fixture_mutation_summary": "Fixture docs/testing/fixtures/Q/TC-012/stanza_annotation.json is a full Stanza v2.0 JSON object with a minimal deterministic mutation for MULTIPLE_ROOTS.",
+  "expected_score_rule": "Exact score, band, risk, warning/error counts and summary deltas are declared under expected_quality_assertions and MUST be checked without prose interpretation.",
+  "expected_quality_assertions": [
+    {
+      "scope": "sentence",
+      "text_unit_id": "ch1:text",
+      "sentence_id": "ch1:text:s1",
+      "entity_id": null,
+      "expected_issue_codes": [
+        "MULTIPLE_ROOTS"
+      ],
+      "expected_issue_entities": [
+        {
+          "code": "MULTIPLE_ROOTS",
+          "entity_type": "sentence",
+          "entity_id": "ch1:text:s1",
+          "field": null,
+          "path": null
+        }
+      ],
+      "expected_score": 0.0,
+      "expected_band": "invalid",
+      "expected_risk_level": "critical",
+      "expected_warning_count": 0,
+      "expected_error_count": 1,
+      "expected_summary_assertions": {
+        "quality.summary.total_sentences_evaluated": 1,
+        "quality.summary.high_quality_sentences": 0,
+        "quality.summary.medium_quality_sentences": 0,
+        "quality.summary.low_quality_sentences": 0,
+        "quality.summary.invalid_sentences": 1,
+        "quality.summary.mean_sentence_score": 0.0,
+        "quality.summary.warning_count": 0,
+        "quality.summary.error_count": 1,
+        "text_unit.summary.mean_sentence_score": 0.0,
+        "text_unit.summary.warning_count": 0,
+        "text_unit.summary.error_count": 1
+      },
+      "notes": "Expected score is computed from the registry score_effect and default effective weights unless this test's config fixture explicitly overrides thresholds only."
+    }
+  ],
+  "required_assertions": [
+    "result validates against the public output schema when a JSON result is produced",
+    "issue appears at the exact declared scope and id",
+    "issue entity_type/entity_id/field match expected_issue_entities",
+    "score, band, risk_level, warning_count, error_count, and summary values equal expected_quality_assertions",
+    "unexpected top-level error is absent for succeeded quality issue tests",
+    "diagnostic and issue ordering follows the deterministic ordering contract"
+  ]
+}

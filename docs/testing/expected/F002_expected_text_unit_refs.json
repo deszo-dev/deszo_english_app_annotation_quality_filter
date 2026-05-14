@@ -1,0 +1,76 @@
+[
+  {
+    "kind": "section_title",
+    "text_unit_id": "fm1:title",
+    "owner_type": "front_matter",
+    "owner_id": "fm1",
+    "source_field": "title"
+  },
+  {
+    "kind": "section_text",
+    "text_unit_id": "fm1:text",
+    "owner_type": "front_matter",
+    "owner_id": "fm1",
+    "source_field": "text"
+  },
+  {
+    "kind": "footnote",
+    "text_unit_id": "fm1:fn1",
+    "owner_type": "front_matter",
+    "owner_id": "fm1",
+    "source_field": "text",
+    "footnote_id": "fm1:fn1"
+  },
+  {
+    "kind": "chapter_title",
+    "text_unit_id": "ch1:title",
+    "owner_type": "chapter",
+    "owner_id": "ch1",
+    "source_field": "title"
+  },
+  {
+    "kind": "chapter_text",
+    "text_unit_id": "ch1:text",
+    "owner_type": "chapter",
+    "owner_id": "ch1",
+    "source_field": "text"
+  },
+  {
+    "kind": "footnote",
+    "text_unit_id": "ch1:fn1",
+    "owner_type": "chapter",
+    "owner_id": "ch1",
+    "source_field": "text",
+    "footnote_id": "ch1:fn1"
+  },
+  {
+    "kind": "section_title",
+    "text_unit_id": "bm1:title",
+    "owner_type": "back_matter",
+    "owner_id": "bm1",
+    "source_field": "title"
+  },
+  {
+    "kind": "section_text",
+    "text_unit_id": "bm1:text",
+    "owner_type": "back_matter",
+    "owner_id": "bm1",
+    "source_field": "text"
+  },
+  {
+    "kind": "footnote",
+    "text_unit_id": "bm1:fn1",
+    "owner_type": "back_matter",
+    "owner_id": "bm1",
+    "source_field": "text",
+    "footnote_id": "bm1:fn1"
+  },
+  {
+    "kind": "footnote",
+    "text_unit_id": "book:fn1",
+    "owner_type": "book",
+    "owner_id": "book-001",
+    "source_field": "text",
+    "footnote_id": "book:fn1"
+  }
+]

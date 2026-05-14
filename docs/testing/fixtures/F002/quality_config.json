@@ -1,0 +1,40 @@
+{
+  "thresholds": {
+    "high": 0.8,
+    "medium": 0.6,
+    "low": 0.3
+  },
+  "weights": {
+    "structural": 0.3,
+    "dependency": 0.35,
+    "morphology": 0.15,
+    "sentence": 0.1,
+    "distribution": 0.1
+  },
+  "limits": {
+    "max_sentence_length": 60,
+    "long_sentence_soft": 40,
+    "long_sentence_hard": 80,
+    "max_conj_ratio": 0.3,
+    "severe_conj_ratio": 0.5,
+    "max_noun_ratio": 0.6,
+    "max_deprel_ratio": 0.5,
+    "max_output_json_bytes": 10485760,
+    "max_input_json_bytes": 52428800,
+    "max_json_depth": 200
+  },
+  "checks": {
+    "enable_structural": true,
+    "enable_dependency": true,
+    "enable_morphology": true,
+    "enable_sentence": true,
+    "enable_distribution": true,
+    "enable_entity": true,
+    "validate_text_slices": true
+  },
+  "include_debug": false,
+  "logging": {
+    "enabled": false,
+    "level": "error"
+  }
+}

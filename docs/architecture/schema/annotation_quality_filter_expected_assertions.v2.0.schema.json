@@ -1,0 +1,478 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deszo.local/schema/annotation_quality_filter_expected_assertions.v2.0.schema.json",
+  "title": "AnnotationQualityFilter Expected Assertion Contract v2.0",
+  "description": "Machine-readable expected assertions for golden/delta tests. P0/P1 quality tests must use expected_quality_assertions so generated tests can verify exact issue location, score, band, risk, and summary counts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "assertion_version",
+    "test_id",
+    "expected_status",
+    "expected_codes",
+    "required_assertions"
+  ],
+  "properties": {
+    "assertion_version": {
+      "const": "annotation_quality_filter_expected_assertions.v2.0"
+    },
+    "test_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expected_status": {
+      "enum": [
+        "succeeded",
+        "failed",
+        "cli_failed",
+        "exception"
+      ]
+    },
+    "expected_error_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expected_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "expected_absent_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "expected_cli_exit_code": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "expected_document_preserved": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "expected_score_rule": {
+      "type": "string"
+    },
+    "fixture_mutation_summary": {
+      "type": "string"
+    },
+    "expected_quality_assertions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/QualityAssertion"
+      }
+    },
+    "expected_summary_assertions": {
+      "$ref": "#/$defs/PathValueAssertions"
+    },
+    "expected_cli_assertions": {
+      "$ref": "#/$defs/CliAssertions"
+    },
+    "expected_api_assertions": {
+      "$ref": "#/$defs/ApiAssertions"
+    },
+    "deterministic_generation": {
+      "$ref": "#/$defs/DeterministicGeneration"
+    },
+    "required_assertions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "JsonPointer": {
+      "type": "string",
+      "pattern": "^(/([^/~]|~0|~1)*)*$"
+    },
+    "PathValueAssertions": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": [
+              "number",
+              "integer",
+              "string",
+              "boolean",
+              "null"
+            ]
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": [
+                "number",
+                "integer",
+                "string",
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "IssueEntityAssertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "entity_type",
+        "entity_id"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "entity_type": {
+          "enum": [
+            "text_unit",
+            "sentence",
+            "token",
+            "word",
+            "entity"
+          ]
+        },
+        "entity_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonPointer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "FamilyScores": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "structural": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "dependency": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "morphology": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "sentence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "distribution": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "entity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "QualityAssertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "text_unit_id",
+        "expected_issue_codes",
+        "expected_score",
+        "expected_band",
+        "expected_warning_count",
+        "expected_error_count"
+      ],
+      "properties": {
+        "scope": {
+          "enum": [
+            "sentence",
+            "entity",
+            "text_unit",
+            "document"
+          ]
+        },
+        "text_unit_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sentence_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "entity_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "expected_issue_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "expected_issue_entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IssueEntityAssertion"
+          }
+        },
+        "expected_score": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "expected_band": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "invalid",
+            null
+          ]
+        },
+        "expected_risk_level": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical",
+            null
+          ]
+        },
+        "expected_family_scores": {
+          "$ref": "#/$defs/FamilyScores"
+        },
+        "expected_warning_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expected_error_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expected_summary_assertions": {
+          "$ref": "#/$defs/PathValueAssertions"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "sentence"
+              }
+            },
+            "required": [
+              "scope"
+            ]
+          },
+          "then": {
+            "required": [
+              "sentence_id",
+              "expected_risk_level"
+            ],
+            "properties": {
+              "entity_id": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "entity"
+              }
+            },
+            "required": [
+              "scope"
+            ]
+          },
+          "then": {
+            "required": [
+              "entity_id"
+            ],
+            "properties": {
+              "sentence_id": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CliAssertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command_template": {
+          "type": "string"
+        },
+        "expected_stdout": {
+          "enum": [
+            "json_result",
+            "empty",
+            "version_text",
+            "help_text"
+          ]
+        },
+        "expected_stderr": {
+          "enum": [
+            "empty",
+            "safe_human_readable",
+            "usage_text",
+            "unspecified_safe"
+          ]
+        },
+        "expected_files_created": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected_files_absent_or_unmodified": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ApiAssertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "call_template": {
+          "type": "string"
+        },
+        "expected_exception": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "input_mutation_allowed": {
+          "const": false
+        },
+        "filesystem_access_allowed": {
+          "const": false
+        },
+        "network_access_allowed": {
+          "const": false
+        }
+      }
+    },
+    "DeterministicGeneration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "recipe"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "fixture_mutation",
+            "generated_json_bytes",
+            "generated_json_depth",
+            "aggregator_unit_case",
+            "filesystem_precondition",
+            "api_runtime_object"
+          ]
+        },
+        "recipe": {
+          "type": "string",
+          "minLength": 1
+        },
+        "base_fixture": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "generated_fixture_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exact_size_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "exact_depth": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

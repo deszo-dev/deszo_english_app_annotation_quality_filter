@@ -1,0 +1,31 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-API-021",
+  "expected_status": "exception",
+  "expected_error_code": null,
+  "expected_codes": [],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": null,
+  "expected_document_preserved": null,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "expected_api_assertions": {
+    "call_template": "evaluate_stanza_result(input_data={'bad': open_file_handle}, config={})",
+    "expected_exception": "AnnotationQualityProgrammerError",
+    "input_mutation_allowed": false,
+    "filesystem_access_allowed": false,
+    "network_access_allowed": false
+  },
+  "deterministic_generation": {
+    "kind": "api_runtime_object",
+    "recipe": "Pass a non-JSON runtime object such as an open file handle in input_data. The public API must raise AnnotationQualityProgrammerError before any domain validation.",
+    "base_fixture": null,
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "AnnotationQualityProgrammerError is raised",
+    "no failed JSON result is returned for unsafe programmer misuse",
+    "no filesystem or network access occurs"
+  ]
+}

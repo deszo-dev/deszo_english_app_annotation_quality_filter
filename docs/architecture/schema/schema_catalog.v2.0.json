@@ -1,0 +1,54 @@
+{
+  "catalog_version": "annotation_quality_filter_schema_catalog.v2.0",
+  "offline_only": true,
+  "schemas": [
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter_config.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter_config.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter_effective_config.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter_effective_config.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter_diagnostics.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter_diagnostics.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter_error_registry.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter_error_registry.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter_issue_registry.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter_issue_registry.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/stanza_annotator.v2.0.schema.json",
+      "file": "docs/architecture/schema/stanza_annotator.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/stanza_annotator_config.v2.0.schema.json",
+      "file": "docs/architecture/schema/stanza_annotator_config.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/stanza_annotator_diagnostics.v2.0.schema.json",
+      "file": "docs/architecture/schema/stanza_annotator_diagnostics.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter_test_manifest.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter_test_manifest.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter_expected_assertions.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter_expected_assertions.v2.0.schema.json"
+    },
+    {
+      "id": "https://deszo.local/schema/annotation_quality_filter_contract_test_manifest.v2.0.schema.json",
+      "file": "docs/architecture/schema/annotation_quality_filter_contract_test_manifest.v2.0.schema.json"
+    }
+  ]
+}

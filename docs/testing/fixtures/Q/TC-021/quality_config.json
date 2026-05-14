@@ -1,0 +1,5 @@
+{
+  "limits": {
+    "long_sentence_soft": 3
+  }
+}

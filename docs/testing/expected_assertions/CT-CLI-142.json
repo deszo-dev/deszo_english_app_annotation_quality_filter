@@ -1,0 +1,43 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-CLI-142",
+  "expected_status": "cli_failed",
+  "expected_error_code": "output_write_failed",
+  "expected_codes": [
+    "output_write_failed",
+    "output_channel_write_failed"
+  ],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": 3,
+  "expected_document_preserved": false,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "expected_cli_assertions": {
+    "expected_stdout": "empty",
+    "expected_stderr": "safe_human_readable",
+    "expected_files_created": [],
+    "expected_files_absent_or_unmodified": [
+      "<tmp>/out.json",
+      "<tmp>/quality.json"
+    ],
+    "preconditions": [
+      "create temp directory",
+      "ensure target paths are absent before invocation",
+      "make <tmp>/quality.json an unsafe directory or symlink before invocation"
+    ],
+    "command_template": "annotation-quality-filter evaluate docs/testing/fixtures/F001/stanza_annotation.json --output <tmp>/out.json --quality-output <tmp>/quality.json"
+  },
+  "deterministic_generation": {
+    "kind": "filesystem_precondition",
+    "recipe": "Pre-create an unsafe --quality-output path while --output path is writable. The CLI must preflight both and write neither.",
+    "base_fixture": "docs/testing/fixtures/F001/stanza_annotation.json",
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "CLI exits 3",
+    "stdout is empty",
+    "neither output file is created or modified",
+    "no symlink write-through occurs"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "thresholds": {
+    "low": 0.9,
+    "medium": 0.6,
+    "high": 0.8
+  }
+}

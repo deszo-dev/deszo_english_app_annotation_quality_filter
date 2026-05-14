@@ -1,0 +1,31 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-API-022",
+  "expected_status": "succeeded",
+  "expected_error_code": null,
+  "expected_codes": [],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": null,
+  "expected_document_preserved": true,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "expected_api_assertions": {
+    "call_template": "evaluate_stanza_result(deepcopy(F001), config={})",
+    "expected_exception": null,
+    "input_mutation_allowed": false,
+    "filesystem_access_allowed": false,
+    "network_access_allowed": false
+  },
+  "deterministic_generation": {
+    "kind": "fixture_mutation",
+    "recipe": "Deep-copy F001 before calling API and compare the original object to its pre-call canonical JSON after the call.",
+    "base_fixture": "docs/testing/fixtures/F001/stanza_annotation.json",
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "input_data is deep-equal before and after the API call",
+    "config object is deep-equal before and after the API call",
+    "result succeeds and validates"
+  ]
+}

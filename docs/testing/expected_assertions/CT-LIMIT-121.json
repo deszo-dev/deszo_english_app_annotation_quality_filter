@@ -1,0 +1,27 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-LIMIT-121",
+  "expected_status": "failed",
+  "expected_error_code": "invalid_input",
+  "expected_codes": [
+    "invalid_input",
+    "input_size_limit_exceeded"
+  ],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": 1,
+  "expected_document_preserved": false,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "deterministic_generation": {
+    "kind": "generated_json_bytes",
+    "recipe": "Serialize F001 using compact UTF-8 JSON. Set limits.max_input_json_bytes to exactly one byte less than the compact byte length. Input is rejected before semantic traversal.",
+    "base_fixture": "docs/testing/fixtures/F001/stanza_annotation.json",
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "input byte boundary plus one over limit is rejected",
+    "error.code is invalid_input",
+    "diagnostics contains input_size_limit_exceeded"
+  ]
+}

@@ -19,6 +19,7 @@ from .models import (
     Sentence,
     validate_config,
 )
+from .runtime_metadata import StageRuntimeMetadata, annotation_quality_filter_runtime_metadata
 
 VERB_UPOS = {"VERB", "AUX"}
 NOUN_LIKE_UPOS = {"NOUN", "PROPN", "PRON"}
@@ -34,6 +35,9 @@ class AnnotationQualityFilter:
     def filter_document(self, document: AnnotatedDocument) -> AnnotatedDocument:
         """Return the primary filtered document in stanza_annotator format."""
         return self.filter_with_status(document).document
+
+    def runtime_metadata(self) -> StageRuntimeMetadata:
+        return annotation_quality_filter_runtime_metadata()
 
     def filter_with_status(
         self, document: AnnotatedDocument
