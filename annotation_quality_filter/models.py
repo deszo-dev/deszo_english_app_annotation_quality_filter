@@ -1,193 +1,156 @@
+"""Runtime models for annotation_quality_filter v2.0.
+
+JSON shapes match the v2.0 schemas exactly and are produced as plain ``dict``
+objects for direct serialization. Only configuration carries a dataclass
+representation because it is used as a typed argument across the pipeline.
+"""
+
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
-from typing import Any, Literal, TypeAlias
+import copy
+from dataclasses import dataclass
+from typing import Any
 
-JsonObject: TypeAlias = dict[str, Any]
+from .schemas import EFFECTIVE_CONFIG_SCHEMA_ID, USER_CONFIG_SCHEMA_ID, first_error
 
-FilterStatus: TypeAlias = Literal["ACCEPT", "WEAK_ACCEPT", "REJECT"]
-RetentionPolicy: TypeAlias = Literal["ACCEPT_AND_WEAK_ACCEPT", "ACCEPT_ONLY"]
-UnresolvableSentenceSpanPolicy: TypeAlias = Literal["error", "drop_entities"]
+CONFIG_VERSION = "annotation_quality_filter_config.v2.0"
 
-AnnotatedDocument: TypeAlias = JsonObject
-Sentence: TypeAlias = JsonObject
-Token: TypeAlias = JsonObject
-Word: TypeAlias = JsonObject
-Entity: TypeAlias = JsonObject
-
-
-class AnnotationQualityError(Exception):
-    """Base error for expected annotation-quality failures."""
-
-
-class InputValidationError(AnnotationQualityError):
-    """Raised when input does not satisfy the AnnotatedDocument contract."""
-
-
-class ConfigurationError(AnnotationQualityError):
-    """Raised when configuration is invalid."""
-
-
-@dataclass(frozen=True)
-class Thresholds:
-    accept: float = 0.80
-    weak_accept: float = 0.60
-
-
-@dataclass(frozen=True)
-class Weights:
-    structural: float = 0.30
-    dependency: float = 0.35
-    morphology: float = 0.15
-    sentence: float = 0.10
-    distribution: float = 0.10
-
-
-@dataclass(frozen=True)
-class Limits:
-    max_sentence_length: int = 60
-    long_sentence_soft: int = 40
-    long_sentence_hard: int = 80
-    max_conj_ratio: float = 0.30
-    severe_conj_ratio: float = 0.50
-    min_token_count: int = 2
+DEFAULT_CONFIG: dict[str, Any] = {
+    "thresholds": {"high": 0.8, "medium": 0.6, "low": 0.3},
+    "weights": {
+        "structural": 0.3,
+        "dependency": 0.35,
+        "morphology": 0.15,
+        "sentence": 0.1,
+        "distribution": 0.1,
+    },
+    "limits": {
+        "max_sentence_length": 60,
+        "long_sentence_soft": 40,
+        "long_sentence_hard": 80,
+        "max_conj_ratio": 0.3,
+        "severe_conj_ratio": 0.5,
+        "max_noun_ratio": 0.6,
+        "max_deprel_ratio": 0.5,
+        "max_output_json_bytes": 10485760,
+        "max_input_json_bytes": 52428800,
+        "max_json_depth": 200,
+    },
+    "checks": {
+        "enable_structural": True,
+        "enable_dependency": True,
+        "enable_morphology": True,
+        "enable_sentence": True,
+        "enable_distribution": True,
+        "enable_entity": True,
+        "validate_text_slices": True,
+    },
+    "include_debug": False,
+    "logging": {"enabled": False, "level": "error"},
+}
 
 
 @dataclass(frozen=True)
-class Checks:
-    enable_morphology: bool = True
-    enable_dependency: bool = True
-    enable_distribution: bool = True
+class ConfigValidationFailure:
+    """Outcome of config validation. ``kind`` is either ``"schema"`` or ``"invariant"``."""
+
+    kind: str
+    path: str
+    message: str
 
 
-@dataclass(frozen=True)
-class EntityFilteringConfig:
-    enabled: bool = True
-    on_unresolvable_sentence_span: UnresolvableSentenceSpanPolicy = "error"
+def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    result = copy.deepcopy(base)
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(result.get(key), dict):
+            result[key] = _deep_merge(result[key], value)
+        else:
+            result[key] = copy.deepcopy(value)
+    return result
 
 
-@dataclass(frozen=True)
-class AnnotationQualityConfig:
-    thresholds: Thresholds = field(default_factory=Thresholds)
-    retention_policy: RetentionPolicy = "ACCEPT_AND_WEAK_ACCEPT"
-    weights: Weights = field(default_factory=Weights)
-    limits: Limits = field(default_factory=Limits)
-    checks: Checks = field(default_factory=Checks)
-    entity_filtering: EntityFilteringConfig = field(default_factory=EntityFilteringConfig)
-    debug: bool = False
-    config_version: str = "1"
+def resolve_effective_config(
+    user_override: dict[str, Any] | None,
+) -> tuple[dict[str, Any] | None, ConfigValidationFailure | None]:
+    """Validate the user override, deep-merge with defaults, and check invariants.
 
+    Returns ``(effective, None)`` on success and ``(None, failure)`` on any
+    failure path. The user override is rejected against the user-config schema
+    before defaults are applied; the resolved effective config is then validated
+    against the effective-config schema and the documented invariants.
+    """
 
-@dataclass(frozen=True)
-class AnnotationQualityResult:
-    score: float
-    label: FilterStatus
-    reasons: list[str]
-    diagnostics: JsonObject
-
-    def to_dict(self) -> JsonObject:
-        return asdict(self)
-
-
-@dataclass(frozen=True)
-class AnnotationQualityAnnotation:
-    input_sentence_index: int
-    sentence_text: str
-    included_in_output: bool
-    status: FilterStatus
-    result: AnnotationQualityResult
-    output_sentence_index: int | None = None
-
-    def to_dict(self) -> JsonObject:
-        payload = {
-            "input_sentence_index": self.input_sentence_index,
-            "sentence_text": self.sentence_text,
-            "included_in_output": self.included_in_output,
-            "status": self.status,
-            "result": self.result.to_dict(),
-        }
-        if self.output_sentence_index is not None:
-            payload["output_sentence_index"] = self.output_sentence_index
-        return payload
-
-
-@dataclass(frozen=True)
-class AnnotationQualitySummary:
-    total_input_sentences: int
-    total_output_sentences: int
-    accepted: int
-    weak_accepted: int
-    rejected: int
-    mean_score: float
-
-    def to_dict(self) -> JsonObject:
-        return asdict(self)
-
-
-@dataclass(frozen=True)
-class AnnotationQualityDocumentStatus:
-    annotations: list[AnnotationQualityAnnotation]
-    summary: AnnotationQualitySummary
-    config_version: str
-    retention_policy: RetentionPolicy
-
-    def to_dict(self) -> JsonObject:
-        return {
-            "annotations": [annotation.to_dict() for annotation in self.annotations],
-            "summary": self.summary.to_dict(),
-            "config_version": self.config_version,
-            "retention_policy": self.retention_policy,
-        }
-
-
-@dataclass(frozen=True)
-class AnnotationQualityFilterOutput:
-    document: AnnotatedDocument
-    status: AnnotationQualityDocumentStatus
-
-    def to_dict(self) -> JsonObject:
-        return {
-            "document": self.document,
-            "status": self.status.to_dict(),
-        }
-
-
-def validate_config(config: AnnotationQualityConfig) -> None:
-    thresholds = config.thresholds
-    if not 0.0 < thresholds.weak_accept <= thresholds.accept <= 1.0:
-        raise ConfigurationError(
-            "thresholds must satisfy 0.0 < weak_accept <= accept <= 1.0"
+    override = user_override or {}
+    if not isinstance(override, dict):
+        return None, ConfigValidationFailure(
+            kind="schema",
+            path="",
+            message="Config must be a JSON object.",
         )
 
-    weights = config.weights
-    values = [
-        weights.structural,
-        weights.dependency,
-        weights.morphology,
-        weights.sentence,
-        weights.distribution,
-    ]
-    if any(value < 0.0 for value in values):
-        raise ConfigurationError("weights must be non-negative")
-    if abs(sum(values) - 1.0) > 0.000001:
-        raise ConfigurationError("weights must sum to 1.0")
+    schema_err = first_error(USER_CONFIG_SCHEMA_ID, override)
+    if schema_err is not None:
+        path, message = schema_err
+        return None, ConfigValidationFailure(kind="schema", path=path, message=message)
 
-    limits = config.limits
-    if any(
-        value <= 0
-        for value in [
-            limits.max_sentence_length,
-            limits.long_sentence_soft,
-            limits.long_sentence_hard,
-            limits.min_token_count,
-        ]
+    effective = _deep_merge(DEFAULT_CONFIG, override)
+
+    effective_err = first_error(EFFECTIVE_CONFIG_SCHEMA_ID, effective)
+    if effective_err is not None:
+        path, message = effective_err
+        return None, ConfigValidationFailure(kind="schema", path=path, message=message)
+
+    invariant = _check_invariants(effective)
+    if invariant is not None:
+        return None, invariant
+
+    return effective, None
+
+
+def _check_invariants(cfg: dict[str, Any]) -> ConfigValidationFailure | None:
+    """Cross-field invariants from architecture §5.3 (CFG-INV-001..007)."""
+
+    thresholds = cfg["thresholds"]
+    if not (thresholds["low"] <= thresholds["medium"] <= thresholds["high"]):
+        return ConfigValidationFailure(
+            kind="invariant",
+            path="/thresholds",
+            message="Config violates thresholds invariant.",
+        )
+
+    weights = cfg["weights"]
+    enabled_sum = 0.0
+    for family in ("structural", "dependency", "morphology", "sentence", "distribution"):
+        if cfg["checks"][f"enable_{family}"]:
+            value = float(weights[family])
+            if value <= 0.0:
+                return ConfigValidationFailure(
+                    kind="invariant",
+                    path=f"/weights/{family}",
+                    message=f"Enabled family weight {family!r} must be > 0.",
+                )
+            enabled_sum += value
+    if enabled_sum <= 0.0:
+        return ConfigValidationFailure(
+            kind="invariant",
+            path="/weights",
+            message="Sum of enabled-family weights must be > 0.",
+        )
+
+    limits = cfg["limits"]
+    if not (
+        limits["long_sentence_soft"] <= limits["max_sentence_length"] <= limits["long_sentence_hard"]
     ):
-        raise ConfigurationError("integer limits must be positive")
-    if not limits.long_sentence_soft <= limits.max_sentence_length <= limits.long_sentence_hard:
-        raise ConfigurationError(
-            "sentence limits must satisfy soft <= max_sentence_length <= hard"
+        return ConfigValidationFailure(
+            kind="invariant",
+            path="/limits",
+            message="Config violates long_sentence_soft <= max_sentence_length <= long_sentence_hard.",
         )
-    if not 0.0 < limits.max_conj_ratio <= limits.severe_conj_ratio <= 1.0:
-        raise ConfigurationError(
-            "conjunction ratios must satisfy 0.0 < max <= severe <= 1.0"
+    if limits["max_conj_ratio"] > limits["severe_conj_ratio"]:
+        return ConfigValidationFailure(
+            kind="invariant",
+            path="/limits",
+            message="Config violates max_conj_ratio <= severe_conj_ratio.",
         )
+
+    return None

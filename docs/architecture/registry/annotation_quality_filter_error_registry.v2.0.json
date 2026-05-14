@@ -1,0 +1,227 @@
+{
+  "registry_version": "annotation_quality_filter_error_registry.v2.0",
+  "compatibility": "Top-level error codes, CLI exit impact, and output-channel policies are public compatibility contract for v2.x.",
+  "errors": [
+    {
+      "code": "invalid_config",
+      "severity": "error",
+      "when_emitted": "Effective config violates JSON Schema, contains unknown/removed fields, or violates cross-field invariants.",
+      "result_impact": "status=failed; document absent; quality absent; annotation_quality present; diagnostics explain config path",
+      "cli_exit_code": 4,
+      "stdout_policy": "Emit failed JSON only when stdout is the selected output channel and serialization is safe; otherwise keep stdout empty.",
+      "stderr_policy": "Emit safe human-readable summary only; no JSON payload, traceback, absolute path, or full input text.",
+      "output_file_policy": "Write failed JSON to selected --output path only when the path is safe and writable; never fall back to stdout after output-file failure.",
+      "quality_output_policy": "Do not create quality sidecar on failed results.",
+      "tests": [
+        "TC-008",
+        "TC-009",
+        "TC-010",
+        "TC-P0-002",
+        "TC-P0-003"
+      ],
+      "message_template": "Invalid annotation_quality_filter config: {detail}."
+    },
+    {
+      "code": "invalid_input",
+      "severity": "error",
+      "when_emitted": "Input JSON is syntactically malformed, not a supported object, misses required input fields, or violates the consumed input contract.",
+      "result_impact": "status=failed; document absent; quality absent; diagnostics explain input path when available",
+      "cli_exit_code": 1,
+      "stdout_policy": "Emit failed JSON only when stdout is the selected output channel and serialization is safe; otherwise keep stdout empty.",
+      "stderr_policy": "Emit safe human-readable summary only; no JSON payload, traceback, absolute path, or full input text.",
+      "output_file_policy": "Write failed JSON to selected --output path only when the path is safe and writable; never fall back to stdout after output-file failure.",
+      "quality_output_policy": "Do not create quality sidecar on failed results.",
+      "tests": [
+        "TC-006",
+        "TC-007",
+        "TC-032",
+        "TC-P0-005"
+      ],
+      "message_template": "Invalid StanzaAnnotationResult input: {detail}."
+    },
+    {
+      "code": "unsupported_stanza_schema",
+      "severity": "error",
+      "when_emitted": "Input schema_version is present but is not compatible with stanza_annotator.v2.0.",
+      "result_impact": "status=failed; document absent; quality absent",
+      "cli_exit_code": 1,
+      "stdout_policy": "Emit failed JSON only when stdout is the selected output channel and serialization is safe; otherwise keep stdout empty.",
+      "stderr_policy": "Emit safe human-readable summary only; no JSON payload, traceback, absolute path, or full input text.",
+      "output_file_policy": "Write failed JSON to selected --output path only when the path is safe and writable; never fall back to stdout after output-file failure.",
+      "quality_output_policy": "Do not create quality sidecar on failed results.",
+      "tests": [
+        "TC-005",
+        "TC-033"
+      ],
+      "message_template": "Unsupported Stanza schema version: {schema_version}."
+    },
+    {
+      "code": "upstream_stanza_annotation_failed",
+      "severity": "error",
+      "when_emitted": "Input StanzaAnnotationResult has upstream failed status or an upstream fatal error envelope.",
+      "result_impact": "status=failed; document absent; quality absent; upstream payload is not exposed as successful document",
+      "cli_exit_code": 1,
+      "stdout_policy": "Emit failed JSON only when stdout is the selected output channel and serialization is safe; otherwise keep stdout empty.",
+      "stderr_policy": "Emit safe human-readable summary only; no JSON payload, traceback, absolute path, or full input text.",
+      "output_file_policy": "Write failed JSON to selected --output path only when the path is safe and writable; never fall back to stdout after output-file failure.",
+      "quality_output_policy": "Do not create quality sidecar on failed results.",
+      "tests": [
+        "TC-004"
+      ],
+      "message_template": "Upstream stanza_annotator result has failed status: {upstream_code}."
+    },
+    {
+      "code": "output_too_large",
+      "severity": "error",
+      "when_emitted": "Serialized success result exceeds configured max_output_json_bytes after evaluation.",
+      "result_impact": "status=failed; document absent; quality absent; emergency failed envelope may exceed configured size limit",
+      "cli_exit_code": 1,
+      "stdout_policy": "Emit failed JSON only when stdout is the selected output channel and serialization is safe; otherwise keep stdout empty.",
+      "stderr_policy": "Emit safe human-readable summary only; no JSON payload, traceback, absolute path, or full input text.",
+      "output_file_policy": "Write failed JSON to selected --output path only when the path is safe and writable; never fall back to stdout after output-file failure.",
+      "quality_output_policy": "Do not create quality sidecar on failed results.",
+      "tests": [
+        "TC-025"
+      ],
+      "message_template": "Serialized annotation_quality_filter result exceeds max_output_json_bytes."
+    },
+    {
+      "code": "output_write_failed",
+      "severity": "error",
+      "when_emitted": "Selected CLI output channel cannot be written safely due to missing parent, symlink, overwrite, permission, or IO failure.",
+      "result_impact": "CLI exits before exposing partial output; stdout remains empty when file output was selected",
+      "cli_exit_code": 3,
+      "stdout_policy": "Emit failed JSON only when stdout is the selected output channel and serialization is safe; otherwise keep stdout empty.",
+      "stderr_policy": "Emit safe human-readable summary only; no JSON payload, traceback, absolute path, or full input text.",
+      "output_file_policy": "Write failed JSON to selected --output path only when the path is safe and writable; never fall back to stdout after output-file failure.",
+      "quality_output_policy": "Do not create quality sidecar on failed results.",
+      "tests": [
+        "TC-031",
+        "TC-P1-003"
+      ],
+      "message_template": "Selected output path cannot be written safely: {path}."
+    },
+    {
+      "code": "internal_error",
+      "severity": "error",
+      "when_emitted": "Unexpected implementation error not covered by expected domain/config/input/output failures.",
+      "result_impact": "status=failed when safe to serialize; otherwise stderr-only safe summary",
+      "cli_exit_code": 99,
+      "stdout_policy": "Emit failed JSON only when stdout is the selected output channel and serialization is safe; otherwise keep stdout empty.",
+      "stderr_policy": "Emit safe human-readable summary only; no JSON payload, traceback, absolute path, or full input text.",
+      "output_file_policy": "Write failed JSON to selected --output path only when the path is safe and writable; never fall back to stdout after output-file failure.",
+      "quality_output_policy": "Do not create quality sidecar on failed results.",
+      "tests": [
+        "TC-P2-011"
+      ],
+      "message_template": "Unexpected annotation_quality_filter internal error."
+    }
+  ],
+  "diagnostic_helpers": [
+    {
+      "code": "config_schema_validation_failed",
+      "severity": "error",
+      "when_emitted": "Config object violates structural JSON Schema before cross-field invariants are checked.",
+      "maps_to_error_code": "invalid_config",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = invalid_config; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 4,
+      "tests": [
+        "TC-008",
+        "TC-P0-002"
+      ]
+    },
+    {
+      "code": "config_invariant_failed",
+      "severity": "error",
+      "when_emitted": "Config object passes JSON Schema but violates a documented cross-field invariant such as thresholds, weights, or limits.",
+      "maps_to_error_code": "invalid_config",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = invalid_config; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 4,
+      "tests": [
+        "TC-009",
+        "TC-P0-003"
+      ]
+    },
+    {
+      "code": "input_json_parse_failed",
+      "severity": "error",
+      "when_emitted": "Input bytes cannot be parsed as JSON.",
+      "maps_to_error_code": "invalid_input",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = invalid_input; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 1,
+      "tests": [
+        "TC-032",
+        "TC-P0-005"
+      ]
+    },
+    {
+      "code": "input_schema_validation_failed",
+      "severity": "error",
+      "when_emitted": "Input JSON object violates the consumed StanzaAnnotationResult schema.",
+      "maps_to_error_code": "invalid_input",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = invalid_input; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 1,
+      "tests": [
+        "TC-007",
+        "TC-P1-024"
+      ]
+    },
+    {
+      "code": "unsupported_input_schema_version",
+      "severity": "error",
+      "when_emitted": "Input schema_version is not stanza_annotator.v2.0-compatible.",
+      "maps_to_error_code": "unsupported_stanza_schema",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = unsupported_stanza_schema; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 1,
+      "tests": [
+        "TC-005",
+        "TC-033"
+      ]
+    },
+    {
+      "code": "upstream_failure_status_seen",
+      "severity": "error",
+      "when_emitted": "Input StanzaAnnotationResult status is failed.",
+      "maps_to_error_code": "upstream_stanza_annotation_failed",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = upstream_stanza_annotation_failed; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 1,
+      "tests": [
+        "TC-004"
+      ]
+    },
+    {
+      "code": "output_serialization_too_large",
+      "severity": "error",
+      "when_emitted": "Serialized result exceeds max_output_json_bytes.",
+      "maps_to_error_code": "output_too_large",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = output_too_large; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 1,
+      "tests": [
+        "TC-025"
+      ]
+    },
+    {
+      "code": "output_channel_write_failed",
+      "severity": "error",
+      "when_emitted": "Selected output channel cannot be written safely.",
+      "maps_to_error_code": "output_write_failed",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = output_write_failed; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 3,
+      "tests": [
+        "TC-031",
+        "TC-P1-003"
+      ]
+    },
+    {
+      "code": "unexpected_internal_error",
+      "severity": "error",
+      "when_emitted": "Unexpected runtime exception escapes the expected validation/evaluation paths.",
+      "maps_to_error_code": "internal_error",
+      "result_impact": "Emitted as a diagnostic helper for top-level error.code = internal_error; failed wrapper uses the standard failure output contract.",
+      "cli_exit_code": 99,
+      "tests": [
+        "TC-P2-011"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-SCORE-012",
+  "expected_status": "succeeded",
+  "expected_error_code": null,
+  "expected_codes": [],
+  "expected_absent_codes": [
+    "HEAD_WORD_ID_MISMATCH"
+  ],
+  "expected_cli_exit_code": 0,
+  "expected_document_preserved": true,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "expected_quality_assertions": [
+    {
+      "scope": "sentence",
+      "text_unit_id": "ch1:text",
+      "sentence_id": "ch1:text:s1",
+      "entity_id": null,
+      "expected_issue_codes": [],
+      "expected_issue_entities": [],
+      "expected_score": 1.0,
+      "expected_band": "high",
+      "expected_risk_level": "low",
+      "expected_warning_count": 0,
+      "expected_error_count": 0,
+      "expected_summary_assertions": {
+        "quality.summary.mean_sentence_score": 1.0,
+        "quality.summary.warning_count": 0,
+        "quality.summary.error_count": 0,
+        "quality.summary.high_quality_sentences": 1
+      },
+      "notes": "Dependency family disabled; dependency warning fixture must not emit HEAD_WORD_ID_MISMATCH and disabled family is removed from denominator."
+    }
+  ],
+  "deterministic_generation": {
+    "kind": "fixture_mutation",
+    "recipe": "Use Q/TC-P1-005 fixture with config disabling checks.enable_dependency; expected no dependency issue and score 1.0.",
+    "base_fixture": "docs/testing/fixtures/Q/TC-P1-005/stanza_annotation.json",
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "no dependency-family issue is emitted when enable_dependency=false",
+    "sentence score is exactly 1.0 and denominator excludes dependency family",
+    "document is preserved"
+  ]
+}

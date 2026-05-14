@@ -1,0 +1,25 @@
+{
+  "schema_version": "annotation_quality_filter.v2.0",
+  "status": "failed",
+  "diagnostics": [
+    {
+      "code": "unsupported_input_schema_version",
+      "severity": "error",
+      "message": "Unsupported Stanza schema version.",
+      "source": "annotation_quality_filter",
+      "path": "/schema_version"
+    }
+  ],
+  "annotation_quality": {
+    "module_name": "annotation_quality_filter",
+    "module_version": "2.0.0",
+    "config_version": "annotation_quality_filter_config.v2.0",
+    "status": "failed",
+    "duration_ms": 0.0
+  },
+  "error": {
+    "code": "unsupported_stanza_schema",
+    "message": "Unsupported Stanza schema version.",
+    "recoverable": false
+  }
+}

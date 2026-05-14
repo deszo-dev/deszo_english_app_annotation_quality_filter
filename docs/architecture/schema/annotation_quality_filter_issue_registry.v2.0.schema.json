@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deszo.local/schema/annotation_quality_filter_issue_registry.v2.0.schema.json",
+  "title": "AnnotationQualityFilter Issue Registry v2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "registry_version",
+    "compatibility",
+    "codes"
+  ],
+  "properties": {
+    "registry_version": {
+      "const": "annotation_quality_filter_issue_registry.v2.0"
+    },
+    "compatibility": {
+      "type": "string",
+      "minLength": 1
+    },
+    "codes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/RegistryEntry"
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "RegistryEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "entity_type",
+        "when_emitted",
+        "result_impact",
+        "message_template",
+        "tests",
+        "family",
+        "scope",
+        "score_effect"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "https://deszo.local/schema/annotation_quality_filter_diagnostics.v2.0.schema.json#/$defs/QualityIssueCode"
+        },
+        "severity": {
+          "$ref": "https://deszo.local/schema/annotation_quality_filter_diagnostics.v2.0.schema.json#/$defs/Severity"
+        },
+        "entity_type": {
+          "enum": [
+            "text_unit",
+            "sentence",
+            "token",
+            "word",
+            "entity"
+          ]
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "when_emitted": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result_impact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message_template": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tests": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "family": {
+          "enum": [
+            "structural",
+            "dependency",
+            "morphology",
+            "sentence",
+            "distribution",
+            "entity"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "sentence",
+            "entity"
+          ]
+        },
+        "score_effect": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode"
+          ],
+          "properties": {
+            "mode": {
+              "enum": [
+                "penalty",
+                "hard_invalid"
+              ]
+            },
+            "penalty": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "cap_per_family": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "mode": {
+                    "const": "penalty"
+                  }
+                },
+                "required": [
+                  "mode"
+                ]
+              },
+              "then": {
+                "required": [
+                  "penalty"
+                ]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "mode": {
+                    "const": "hard_invalid"
+                  }
+                },
+                "required": [
+                  "mode"
+                ]
+              },
+              "then": {
+                "not": {
+                  "required": [
+                    "penalty"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

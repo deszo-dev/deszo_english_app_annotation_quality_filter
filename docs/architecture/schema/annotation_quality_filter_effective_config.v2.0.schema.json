@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deszo.local/schema/annotation_quality_filter_effective_config.v2.0.schema.json",
+  "title": "AnnotationQualityEffectiveConfig v2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "thresholds",
+    "weights",
+    "limits",
+    "checks",
+    "include_debug",
+    "logging"
+  ],
+  "properties": {
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "properties": {
+        "high": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.8
+        },
+        "medium": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.6
+        },
+        "low": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.3
+        }
+      }
+    },
+    "weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "structural",
+        "dependency",
+        "morphology",
+        "sentence",
+        "distribution"
+      ],
+      "properties": {
+        "structural": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0.3
+        },
+        "dependency": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0.35
+        },
+        "morphology": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0.15
+        },
+        "sentence": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0.1
+        },
+        "distribution": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0.1
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_sentence_length",
+        "long_sentence_soft",
+        "long_sentence_hard",
+        "max_conj_ratio",
+        "severe_conj_ratio",
+        "max_noun_ratio",
+        "max_deprel_ratio",
+        "max_output_json_bytes",
+        "max_input_json_bytes",
+        "max_json_depth"
+      ],
+      "properties": {
+        "max_sentence_length": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 60
+        },
+        "long_sentence_soft": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 40
+        },
+        "long_sentence_hard": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 80
+        },
+        "max_conj_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.3
+        },
+        "severe_conj_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        },
+        "max_noun_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.6
+        },
+        "max_deprel_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        },
+        "max_output_json_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 10485760
+        },
+        "max_input_json_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 52428800
+        },
+        "max_json_depth": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 200
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enable_structural",
+        "enable_dependency",
+        "enable_morphology",
+        "enable_sentence",
+        "enable_distribution",
+        "enable_entity",
+        "validate_text_slices"
+      ],
+      "properties": {
+        "enable_structural": {
+          "type": "boolean",
+          "default": true
+        },
+        "enable_dependency": {
+          "type": "boolean",
+          "default": true
+        },
+        "enable_morphology": {
+          "type": "boolean",
+          "default": true
+        },
+        "enable_sentence": {
+          "type": "boolean",
+          "default": true
+        },
+        "enable_distribution": {
+          "type": "boolean",
+          "default": true
+        },
+        "enable_entity": {
+          "type": "boolean",
+          "default": true
+        },
+        "validate_text_slices": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "include_debug": {
+      "type": "boolean",
+      "default": false
+    },
+    "logging": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "level"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "level": {
+          "enum": [
+            "debug",
+            "info",
+            "warning",
+            "error"
+          ],
+          "default": "error"
+        }
+      }
+    }
+  },
+  "description": "Fully resolved effective annotation_quality_filter config after defaults and deep merge. Unlike the user override schema, every field required by the runtime is required here."
+}

@@ -1,0 +1,33 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-DET-050",
+  "expected_status": "succeeded",
+  "expected_error_code": null,
+  "expected_codes": [],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": 0,
+  "expected_document_preserved": true,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "expected_summary_assertions": {
+    "normalized_outputs_equal": true,
+    "unstable_fields": [
+      "annotation_quality.started_at",
+      "annotation_quality.finished_at",
+      "annotation_quality.duration_ms",
+      "debug"
+    ]
+  },
+  "deterministic_generation": {
+    "kind": "fixture_mutation",
+    "recipe": "Run F001 with config {} twice under the same implementation version. Normalize only documented unstable fields and compare canonical JSON byte-for-byte.",
+    "base_fixture": "docs/testing/fixtures/F001/stanza_annotation.json",
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "normalized outputs from repeated runs are byte-for-byte identical",
+    "fingerprints are identical",
+    "issue and diagnostic ordering is identical"
+  ]
+}

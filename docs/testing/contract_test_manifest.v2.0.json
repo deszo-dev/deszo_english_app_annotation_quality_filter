@@ -1,0 +1,234 @@
+{
+  "manifest_version": "annotation_quality_filter_contract_test_manifest.v2.0",
+  "description": "Automation-ready non-registry contract tests for release gating. These tests supplement registry-bound tests in test_manifest.v2.0.json.",
+  "tests": [
+    {
+      "id": "CT-SCORE-012",
+      "priority": "P1",
+      "area": "scoring_boundary",
+      "purpose": "Disabled dependency family removes that family from scoring and suppresses dependency-family issue emission.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#41-deterministic-scoring-and-bands",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-005/stanza_annotation.json",
+      "config_fixture_or_inline": "{\"checks\":{\"enable_dependency\":false}}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-SCORE-012.json",
+      "deterministic_generation": {
+        "kind": "none",
+        "recipe": "Uses checked-in fixture and inline config."
+      },
+      "assertions": [
+        "expected_quality_assertions are exact",
+        "HEAD_WORD_ID_MISMATCH is absent",
+        "score is exactly 1.0"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "CT-SCORE-013",
+      "priority": "P1",
+      "area": "scoring_boundary",
+      "purpose": "Band mapping is lower-bound inclusive when score equals thresholds.high exactly.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#41-deterministic-scoring-and-bands",
+      "input_fixture_or_inline": "docs/testing/fixtures/Q/TC-P1-005/stanza_annotation.json",
+      "config_fixture_or_inline": "{\"thresholds\":{\"high\":0.9475,\"medium\":0.6,\"low\":0.3}}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-SCORE-013.json",
+      "deterministic_generation": {
+        "kind": "none",
+        "recipe": "Uses checked-in fixture and inline config."
+      },
+      "assertions": [
+        "score is exactly 0.9475",
+        "band is high at high threshold boundary"
+      ],
+      "normalization": "Use golden normalization rules from testing guide section 6."
+    },
+    {
+      "id": "CT-SCORE-110",
+      "priority": "P1",
+      "area": "scoring_rounding",
+      "purpose": "Summary means use decimal half-even rounding to 6 decimals.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#41-deterministic-scoring-and-bands",
+      "input_fixture_or_inline": "inline rounded item scores [0.123456, 0.123457]",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "unit"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-SCORE-110.json",
+      "deterministic_generation": {
+        "kind": "aggregator_unit_case",
+        "recipe": "Call summary aggregator with the exact rounded item scores declared in expected assertion."
+      },
+      "assertions": [
+        "mean before rounding is 0.1234565",
+        "half-even 6dp result is 0.123456"
+      ],
+      "normalization": "No output normalization; exact Decimal arithmetic."
+    },
+    {
+      "id": "CT-CLI-142",
+      "priority": "P1",
+      "area": "cli_filesystem",
+      "purpose": "Multi-output preflight prevents partial writes when --quality-output is unsafe.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#7-cli-contract",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-CLI-142.json",
+      "deterministic_generation": {
+        "kind": "filesystem_precondition",
+        "recipe": "Create temp dir and unsafe quality-output path before invocation."
+      },
+      "assertions": [
+        "exit code 3",
+        "stdout empty",
+        "no partial output files"
+      ],
+      "normalization": "Filesystem assertions are exact; stderr may be safe human-readable."
+    },
+    {
+      "id": "CT-CLI-135",
+      "priority": "P1",
+      "area": "cli_usage",
+      "purpose": "CLI rejects reading both input and config from stdin.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#7-cli-contract",
+      "input_fixture_or_inline": "stdin",
+      "config_fixture_or_inline": "stdin",
+      "execution_modes": [
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-CLI-135.json",
+      "deterministic_generation": {
+        "kind": "none",
+        "recipe": "Invoke command exactly as in expected_cli_assertions."
+      },
+      "assertions": [
+        "exit code 2",
+        "no JSON result",
+        "stdout empty"
+      ],
+      "normalization": "No JSON normalization; usage error only."
+    },
+    {
+      "id": "CT-API-021",
+      "priority": "P1",
+      "area": "api_programmer_error",
+      "purpose": "Unsafe non-JSON runtime object raises AnnotationQualityProgrammerError.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#04-public-python-api--library-mode-contract",
+      "input_fixture_or_inline": "inline non-json runtime object",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-API-021.json",
+      "deterministic_generation": {
+        "kind": "api_runtime_object",
+        "recipe": "Use an open file handle or generator as input_data value."
+      },
+      "assertions": [
+        "AnnotationQualityProgrammerError raised",
+        "no JSON failed result returned"
+      ],
+      "normalization": "Exception type is exact."
+    },
+    {
+      "id": "CT-API-022",
+      "priority": "P1",
+      "area": "api_mutability",
+      "purpose": "Library API does not mutate input_data or config.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#04-public-python-api--library-mode-contract",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-API-022.json",
+      "deterministic_generation": {
+        "kind": "fixture_mutation",
+        "recipe": "Deep-copy fixture and compare canonical JSON before/after call."
+      },
+      "assertions": [
+        "input and config deep-equal before and after",
+        "result validates"
+      ],
+      "normalization": "Canonical JSON sorted keys, compact separators."
+    },
+    {
+      "id": "CT-DET-050",
+      "priority": "P1",
+      "area": "determinism",
+      "purpose": "Repeated runs produce identical normalized output.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#8-determinism-fingerprints-and-normalization",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "{}",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-DET-050.json",
+      "deterministic_generation": {
+        "kind": "none",
+        "recipe": "Run same fixture/config twice under same installed implementation."
+      },
+      "assertions": [
+        "normalized outputs equal",
+        "fingerprints equal"
+      ],
+      "normalization": "Remove only timestamps/duration/debug/temp paths documented by guide section 6."
+    },
+    {
+      "id": "CT-LIMIT-120",
+      "priority": "P1",
+      "area": "limits",
+      "purpose": "max_input_json_bytes exact boundary is accepted.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#6-limits-and-boundary-behavior",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "generated exact max_input_json_bytes",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-LIMIT-120.json",
+      "deterministic_generation": {
+        "kind": "generated_json_bytes",
+        "recipe": "Set limit to compact UTF-8 byte length of F001."
+      },
+      "assertions": [
+        "result succeeds",
+        "input boundary is inclusive"
+      ],
+      "normalization": "Use compact UTF-8 JSON for byte count."
+    },
+    {
+      "id": "CT-LIMIT-121",
+      "priority": "P1",
+      "area": "limits",
+      "purpose": "max_input_json_bytes plus one over limit is rejected.",
+      "requirement_reference": "docs/architecture/annotation_quality_filter_architecture.md#6-limits-and-boundary-behavior",
+      "input_fixture_or_inline": "docs/testing/fixtures/F001/stanza_annotation.json",
+      "config_fixture_or_inline": "generated max_input_json_bytes one less than compact byte length",
+      "execution_modes": [
+        "api",
+        "cli"
+      ],
+      "expected_result": "docs/testing/expected_assertions/CT-LIMIT-121.json",
+      "deterministic_generation": {
+        "kind": "generated_json_bytes",
+        "recipe": "Set limit one byte lower than compact UTF-8 byte length of F001."
+      },
+      "assertions": [
+        "result fails invalid_input",
+        "diagnostics contains input_size_limit_exceeded"
+      ],
+      "normalization": "Use compact UTF-8 JSON for byte count."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": "stanza_annotator.v2.0",
+  "status": "failed",
+  "diagnostics": [],
+  "annotation": {
+    "summary": {
+      "text_unit_count": 0,
+      "annotated_text_unit_count": 0,
+      "skipped_text_unit_count": 0,
+      "warning_count": 0,
+      "error_count": 1
+    }
+  },
+  "error": {
+    "code": "stanza_runtime_failed",
+    "message": "Runtime failed.",
+    "recoverable": false
+  }
+}

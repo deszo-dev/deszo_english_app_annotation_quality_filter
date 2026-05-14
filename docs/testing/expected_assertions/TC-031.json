@@ -1,0 +1,38 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "TC-031",
+  "expected_status": "cli_failed",
+  "expected_error_code": "output_write_failed",
+  "expected_codes": [
+    "output_write_failed",
+    "output_channel_write_failed"
+  ],
+  "expected_cli_exit_code": 3,
+  "expected_document_preserved": false,
+  "fixture_mutation_summary": "Use the checked-in fixture/config named by this manifest entry without additional human interpretation.",
+  "expected_score_rule": "If status is succeeded, issue penalties and bands MUST be computed from the registry score_effect and deterministic scoring contract.",
+  "required_assertions": [
+    "CLI preflights output paths before writing any file",
+    "stdout is empty when --output was requested",
+    "no partial output or quality sidecar is created or modified",
+    "diagnostics contain output_channel_write_failed when a JSON result can be emitted",
+    "CLI exit code equals expected_cli_exit_code",
+    "stdout behavior matches expected_cli_assertions.expected_stdout",
+    "file-system state matches expected_files_created and expected_files_absent_or_unmodified"
+  ],
+  "expected_cli_assertions": {
+    "command_template": "annotation-quality-filter evaluate docs/testing/fixtures/F001/stanza_annotation.json --output <tmp>/out.json --quality-output <unsafe-path>",
+    "expected_stdout": "empty",
+    "expected_stderr": "safe_human_readable",
+    "expected_files_created": [],
+    "expected_files_absent_or_unmodified": [
+      "<tmp>/out.json",
+      "<unsafe-path>"
+    ],
+    "preconditions": [
+      "create temporary directory",
+      "make <unsafe-path> a directory, symlink, missing-parent path, or permission-denied target according to the concrete test variant",
+      "ensure output files do not exist before execution"
+    ]
+  }
+}

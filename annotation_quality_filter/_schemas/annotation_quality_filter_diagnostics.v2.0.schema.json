@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deszo.local/schema/annotation_quality_filter_diagnostics.v2.0.schema.json",
+  "title": "AnnotationQuality diagnostics and issue codes v2.0",
+  "$defs": {
+    "Severity": {
+      "enum": [
+        "info",
+        "warning",
+        "error"
+      ]
+    },
+    "QualityIssueCode": {
+      "enum": [
+        "NO_ROOT",
+        "MULTIPLE_ROOTS",
+        "INVALID_HEAD_INDEX",
+        "HEAD_WORD_ID_MISMATCH",
+        "TOKEN_WORD_REFERENCE_INVALID",
+        "DISCONNECTED_DEPENDENCY_TREE",
+        "ORPHAN_DEPENDENCY_NODE",
+        "EMPTY_SENTENCE_WORDS",
+        "SENTENCE_TEXT_MISMATCH",
+        "SENTENCE_SPAN_INVALID",
+        "TOKEN_SPAN_INVALID",
+        "WORD_SPAN_INVALID",
+        "ENTITY_SPAN_INVALID",
+        "ENTITY_TEXT_MISMATCH",
+        "MISSING_SUBJECT",
+        "BROKEN_AUX_CHAIN",
+        "EXCESSIVE_CONJ",
+        "SUSPICIOUS_DEPREL_PAIR",
+        "INVALID_RELCL_ATTACHMENT",
+        "MISSING_TENSE",
+        "EMPTY_MORPHOLOGY",
+        "AGREEMENT_MISMATCH",
+        "TOO_LONG_SENTENCE",
+        "CONTAINS_NEWLINE",
+        "NO_MAIN_VERB",
+        "POS_DISTRIBUTION_ANOMALY",
+        "DEPREL_DISTRIBUTION_ANOMALY"
+      ]
+    },
+    "AnnotationQualityDiagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/AnnotationQualityDiagnosticCode"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(/[^/]+)*$"
+        },
+        "entity_type": {
+          "enum": [
+            "config",
+            "input",
+            "output",
+            "text_unit",
+            "sentence",
+            "token",
+            "word",
+            "entity",
+            "runtime"
+          ]
+        },
+        "entity_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "enum": [
+            "annotation_quality_filter",
+            "stanza_annotator"
+          ]
+        }
+      }
+    },
+    "TopLevelErrorCode": {
+      "enum": [
+        "invalid_config",
+        "invalid_input",
+        "unsupported_stanza_schema",
+        "upstream_stanza_annotation_failed",
+        "output_too_large",
+        "output_write_failed",
+        "internal_error"
+      ]
+    },
+    "AnnotationQualityDiagnosticCode": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TopLevelErrorCode"
+        },
+        {
+          "$ref": "#/$defs/QualityIssueCode"
+        },
+        {
+          "enum": [
+            "config_schema_validation_failed",
+            "config_invariant_failed",
+            "input_json_parse_failed",
+            "input_schema_validation_failed",
+            "unsupported_input_schema_version",
+            "upstream_failure_status_seen",
+            "output_serialization_too_large",
+            "output_channel_write_failed",
+            "unexpected_internal_error"
+          ]
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "diagnostics"
+  ],
+  "properties": {
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AnnotationQualityDiagnostic"
+      }
+    }
+  }
+}

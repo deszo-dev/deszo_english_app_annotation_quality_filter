@@ -1,0 +1,25 @@
+{
+  "schema_version": "annotation_quality_filter.v2.0",
+  "status": "failed",
+  "diagnostics": [
+    {
+      "code": "upstream_failure_status_seen",
+      "severity": "error",
+      "message": "Upstream stanza annotation failed.",
+      "source": "annotation_quality_filter",
+      "path": "/status"
+    }
+  ],
+  "annotation_quality": {
+    "module_name": "annotation_quality_filter",
+    "module_version": "2.0.0",
+    "config_version": "annotation_quality_filter_config.v2.0",
+    "status": "failed",
+    "duration_ms": 0.0
+  },
+  "error": {
+    "code": "upstream_stanza_annotation_failed",
+    "message": "Upstream stanza annotation failed.",
+    "recoverable": false
+  }
+}

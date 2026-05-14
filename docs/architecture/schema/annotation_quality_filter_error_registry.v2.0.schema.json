@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deszo.local/schema/annotation_quality_filter_error_registry.v2.0.schema.json",
+  "title": "AnnotationQualityFilter Top-Level Error Registry v2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "registry_version",
+    "compatibility",
+    "errors",
+    "diagnostic_helpers"
+  ],
+  "properties": {
+    "registry_version": {
+      "const": "annotation_quality_filter_error_registry.v2.0"
+    },
+    "compatibility": {
+      "type": "string",
+      "minLength": 1
+    },
+    "errors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/ErrorRegistryEntry"
+      },
+      "uniqueItems": true
+    },
+    "diagnostic_helpers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/DiagnosticHelperRegistryEntry"
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "ErrorRegistryEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "when_emitted",
+        "result_impact",
+        "cli_exit_code",
+        "stdout_policy",
+        "stderr_policy",
+        "output_file_policy",
+        "quality_output_policy",
+        "tests",
+        "message_template"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "https://deszo.local/schema/annotation_quality_filter_diagnostics.v2.0.schema.json#/$defs/TopLevelErrorCode"
+        },
+        "severity": {
+          "$ref": "https://deszo.local/schema/annotation_quality_filter_diagnostics.v2.0.schema.json#/$defs/Severity"
+        },
+        "when_emitted": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result_impact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cli_exit_code": {
+          "type": "integer",
+          "enum": [
+            1,
+            3,
+            4,
+            99
+          ]
+        },
+        "stdout_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stderr_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "output_file_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quality_output_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tests": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "message_template": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "DiagnosticHelperCode": {
+      "enum": [
+        "config_schema_validation_failed",
+        "config_invariant_failed",
+        "input_json_parse_failed",
+        "input_schema_validation_failed",
+        "unsupported_input_schema_version",
+        "upstream_failure_status_seen",
+        "output_serialization_too_large",
+        "output_channel_write_failed",
+        "unexpected_internal_error"
+      ]
+    },
+    "DiagnosticHelperRegistryEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "when_emitted",
+        "maps_to_error_code",
+        "result_impact",
+        "cli_exit_code",
+        "tests"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/DiagnosticHelperCode"
+        },
+        "severity": {
+          "$ref": "https://deszo.local/schema/annotation_quality_filter_diagnostics.v2.0.schema.json#/$defs/Severity"
+        },
+        "when_emitted": {
+          "type": "string",
+          "minLength": 1
+        },
+        "maps_to_error_code": {
+          "$ref": "https://deszo.local/schema/annotation_quality_filter_diagnostics.v2.0.schema.json#/$defs/TopLevelErrorCode"
+        },
+        "result_impact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cli_exit_code": {
+          "type": "integer",
+          "enum": [
+            1,
+            3,
+            4,
+            99
+          ]
+        },
+        "tests": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "stanza_annotator.v2.0",
+  "status": "succeeded",
+  "diagnostics": [],
+  "annotation": {
+    "annotator_version": "2.0.0-test",
+    "summary": {
+      "text_units_seen": 0,
+      "text_units_annotated": 0,
+      "sentences": 0,
+      "tokens": 0,
+      "words": 0,
+      "entities": 0
+    }
+  }
+}

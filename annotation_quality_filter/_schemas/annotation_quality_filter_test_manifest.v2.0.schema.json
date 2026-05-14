@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deszo.local/schema/annotation_quality_filter_test_manifest.v2.0.schema.json",
+  "title": "AnnotationQualityFilter Test Manifest v2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_version",
+    "tests"
+  ],
+  "properties": {
+    "manifest_version": {
+      "const": "annotation_quality_filter_test_manifest.v2.0"
+    },
+    "description": {
+      "type": "string"
+    },
+    "tests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "priority",
+          "area",
+          "registry_codes",
+          "purpose",
+          "requirement_reference",
+          "input_fixture_or_inline",
+          "config_fixture_or_inline",
+          "execution_modes",
+          "expected_result",
+          "expected_diagnostics_or_issues",
+          "assertions",
+          "normalization"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "priority": {
+            "enum": [
+              "P0",
+              "P1",
+              "P2"
+            ]
+          },
+          "area": {
+            "type": "string"
+          },
+          "registry_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "requirement_reference": {
+            "type": "string"
+          },
+          "input_fixture_or_inline": {
+            "type": "string"
+          },
+          "config_fixture_or_inline": {
+            "type": "string"
+          },
+          "execution_modes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "api",
+                "cli"
+              ]
+            },
+            "minItems": 1
+          },
+          "expected_result": {
+            "type": "string"
+          },
+          "expected_diagnostics_or_issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "assertions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "normalization": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

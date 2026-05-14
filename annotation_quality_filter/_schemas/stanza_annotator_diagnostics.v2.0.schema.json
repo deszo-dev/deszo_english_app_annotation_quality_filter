@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deszo.local/schema/stanza_annotator_diagnostics.v2.0.schema.json",
+  "title": "External upstream diagnostics schema placeholder",
+  "type": "object",
+  "additionalProperties": true,
+  "description": "This package depends on the official stanza_annotator v2.0 diagnostics schema. Vendor the full upstream schema here when implementing CI validation."
+}

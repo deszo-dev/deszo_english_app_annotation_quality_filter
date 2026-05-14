@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "annotation-quality-filter"
-version = "0.1.0"
-description = "Heuristic quality filter for Stanza/UD-like linguistic annotations."
+version = "2.0.0"
+description = "Annotation quality enricher for Stanza v2.0 linguistic annotations."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
@@ -18,6 +18,9 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
   "Topic :: Text Processing :: Linguistic"
 ]
+dependencies = [
+  "jsonschema>=4"
+]
 
 [project.scripts]
 annotation-quality-filter = "annotation_quality_filter.cli:main"
@@ -25,3 +28,6 @@ annotation-quality-filter = "annotation_quality_filter.cli:main"
 [tool.setuptools.packages.find]
 include = ["annotation_quality_filter*"]
 
+[tool.setuptools.package-data]
+"annotation_quality_filter._schemas" = ["*.json"]
+"annotation_quality_filter._registry" = ["*.json"]

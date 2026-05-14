@@ -1,0 +1,32 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-SCORE-110",
+  "expected_status": "succeeded",
+  "expected_error_code": null,
+  "expected_codes": [],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": null,
+  "expected_document_preserved": null,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "expected_quality_assertions": [],
+  "expected_summary_assertions": {
+    "input.rounded_item_scores": [
+      0.123456,
+      0.123457
+    ],
+    "expected_arithmetic_mean_before_rounding": "0.1234565",
+    "expected_half_even_6dp": 0.123456
+  },
+  "deterministic_generation": {
+    "kind": "aggregator_unit_case",
+    "recipe": "Call the summary aggregation helper with already-rounded item scores [0.123456, 0.123457]. Arithmetic mean is 0.1234565 and half-even to 6 decimals MUST return 0.123456 because the sixth decimal 6 is even.",
+    "base_fixture": null,
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "mean rounding uses decimal half-even, not binary float approximation",
+    "exact result is 0.123456"
+  ]
+}

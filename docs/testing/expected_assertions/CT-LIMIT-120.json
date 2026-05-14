@@ -1,0 +1,23 @@
+{
+  "assertion_version": "annotation_quality_filter_expected_assertions.v2.0",
+  "test_id": "CT-LIMIT-120",
+  "expected_status": "succeeded",
+  "expected_error_code": null,
+  "expected_codes": [],
+  "expected_absent_codes": [],
+  "expected_cli_exit_code": 0,
+  "expected_document_preserved": true,
+  "expected_score_rule": "Contract-test expected values are explicit in this artifact; generated tests MUST NOT infer missing score/band/risk behavior from prose.",
+  "deterministic_generation": {
+    "kind": "generated_json_bytes",
+    "recipe": "Serialize F001 using compact UTF-8 JSON. Set limits.max_input_json_bytes to exactly that byte length. Input is accepted.",
+    "base_fixture": "docs/testing/fixtures/F001/stanza_annotation.json",
+    "generated_fixture_path": null,
+    "exact_size_bytes": null,
+    "exact_depth": null
+  },
+  "required_assertions": [
+    "exact input byte boundary is inclusive",
+    "result succeeds and validates"
+  ]
+}

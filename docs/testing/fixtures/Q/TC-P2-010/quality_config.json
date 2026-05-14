@@ -1,0 +1,5 @@
+{
+  "limits": {
+    "max_deprel_ratio": 0.2
+  }
+}

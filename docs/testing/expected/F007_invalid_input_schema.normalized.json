@@ -1,0 +1,25 @@
+{
+  "schema_version": "annotation_quality_filter.v2.0",
+  "status": "failed",
+  "diagnostics": [
+    {
+      "code": "input_schema_validation_failed",
+      "severity": "error",
+      "message": "Input does not satisfy the consumed Stanza schema.",
+      "source": "annotation_quality_filter",
+      "path": "/document"
+    }
+  ],
+  "annotation_quality": {
+    "module_name": "annotation_quality_filter",
+    "module_version": "2.0.0",
+    "config_version": "annotation_quality_filter_config.v2.0",
+    "status": "failed",
+    "duration_ms": 0.0
+  },
+  "error": {
+    "code": "invalid_input",
+    "message": "Input does not satisfy the consumed Stanza schema.",
+    "recoverable": false
+  }
+}

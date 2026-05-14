@@ -1,0 +1,5 @@
+{
+  "checks": {
+    "validate_text_slices": true
+  }
+}
