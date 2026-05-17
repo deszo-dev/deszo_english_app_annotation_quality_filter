@@ -4,6 +4,11 @@ from .evaluator import (
     filter_document,
     filter_with_status,
 )
+from .public_api import (
+    AnnotationQualityProgrammerError,
+    evaluate_stanza_result,
+    get_runtime_metadata,
+)
 from .models import (
     AnnotatedDocument,
     AnnotationQualityAnnotation,
@@ -58,12 +63,15 @@ __all__ = [
     "Thresholds",
     "Token",
     "Word",
+    "AnnotationQualityProgrammerError",
     "annotation_quality_filter_runtime_metadata",
     "canonical_json",
     "directory_source_fingerprint",
+    "evaluate_stanza_result",
     "evaluate_sentence",
     "filter_document",
     "filter_with_status",
+    "get_runtime_metadata",
     "pipeline_runtime_metadata",
     "stage_fingerprint",
 ]
